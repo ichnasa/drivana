@@ -1,5 +1,5 @@
 <?php /** Demo credentials (development only). Vars: $demo = ['label' => [email, password], ...] */ ?>
-<?php if (! empty($demo) && ENVIRONMENT !== 'production'): ?>
+<?php if (! empty($demo) && (ENVIRONMENT !== 'production' || getenv('DEMO_MODE'))): ?>
     <div class="demo">
         <b>Akun demo</b>
         <?php foreach ($demo as $label => [$email, $pass]): ?>

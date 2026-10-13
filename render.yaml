@@ -1,0 +1,12 @@
+# Render Blueprint: New + → Blueprint → pick this repo
+services:
+  - type: web
+    name: drivana
+    runtime: docker
+    plan: free
+    healthCheckPath: /login
+    envVars:
+      - key: DEMO_MODE
+        value: "1"
+      - key: CI_ENVIRONMENT
+        value: production
