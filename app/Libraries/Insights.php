@@ -14,41 +14,6 @@ class Insights
         return Store::where('bookings', fn ($b) => in_array($b['status'], self::COUNTED, true));
     }
 
-    /** Demand by area across the whole platform. */
-    public static function demand(string $period): array
-    {
-        $days = self::PERIODS[$period][1] ?? 7;
-        $from = date('Y-m-d', strtotime("-{$days} days"));
-        $prev = date('Y-m-d', strtotime('-' . ($days * 2) . ' days'));
-        $cur = array_fill_keys(Drivana::AREAS, 0);
-        $before = $cur;
-        foreach (self::counted() as $b) {
-            if ($b['start_date'] >= $from) {
-                $cur[$b['area']] = ($cur[$b['area']] ?? 0) + 1;
-            } elseif ($b['start_date'] >= $prev) {
-                $before[$b['area']] = ($before[$b['area']] ?? 0) + 1;
-            }
-        }
-
-        $rows = [];
-        foreach (Drivana::AREAS as $a) {
-            $n = $cur[$a];
-            $p = $before[$a];
-            $rows[] = ['name' => $a, 'count' => $n, 'prev' => $p, 'trend' => $p > 0 ? (int) round(($n - $p) / $p * 100) : ($n > 0 ? 100 : 0)];
-        }
-        usort($rows, fn ($x, $y) => $y['count'] <=> $x['count']);
-        $max = max(1, $rows[0]['count'] ?? 1);
-        $n = count($rows);
-        foreach ($rows as $i => &$r) {
-            $r['percent'] = (int) round($r['count'] / $max * 100);
-            $r['level'] = $r['count'] === 0 ? 'Rendah' : ($i < ceil($n / 3) ? 'Tinggi' : ($i < ceil($n * 2 / 3) ? 'Sedang' : 'Rendah'));
-            $r['per_day'] = round($r['count'] / $days, 1);
-        }
-        unset($r);
-
-        return ['areas' => $rows, 'top' => array_slice(array_values(array_filter($rows, fn ($r) => $r['count'] > 0)), 0, 3), 'total' => array_sum($cur), 'prev_total' => array_sum($before)];
-    }
-
     /** Suggested daily price for a car, based on same-type cars and recent demand. */
     public static function price(array $car): array
     {

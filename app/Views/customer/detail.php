@@ -5,16 +5,18 @@ $inService = $car['ops_status'] !== 'tersedia';
 $qs = ($start && $end) ? '?start=' . urlencode($start) . '&end=' . urlencode($end) : '';
 ?>
 
+<?= partial('components/topbar', ['title' => 'Detail mobil', 'back' => site_url('cari')]) ?>
+
 <div class="hero-photo">
     <img src="<?= car_img($car['image']) ?>" alt="<?= esc($car['name']) ?>">
-    <a class="icon-btn" href="<?= site_url('cari') ?>" aria-label="Kembali"><?= icon('arrow-left', 22) ?></a>
     <?php if ($inService): ?><span class="badge badge-yellow">Sedang servis</span>
     <?php elseif ($car['is_boosted']): ?><span class="badge badge-black">Sponsored</span><?php endif ?>
 </div>
 
-<div class="page has-cta stack" style="padding-top:20px">
+<div class="page has-cta stack" style="padding-top:16px">
     <?= partial('components/alerts') ?>
 
+    <div class="card detail-card stack">
     <div class="detail-head">
         <div>
             <h2><?= esc($car['name']) ?></h2>
@@ -32,6 +34,7 @@ $qs = ($start && $end) ? '?start=' . urlencode($start) . '&end=' . urlencode($en
         <div><small>Transmisi</small><b><?= esc($car['transmission']) ?></b></div>
         <div><small>BBM</small><b><?= esc($car['fuel']) ?></b></div>
         <div><small>Wilayah</small><b><?= esc($car['area']) ?></b></div>
+    </div>
     </div>
 
     <?php if ($car['description']): ?><p class="lead" style="color:var(--ink-2)"><?= esc($car['description']) ?></p><?php endif ?>

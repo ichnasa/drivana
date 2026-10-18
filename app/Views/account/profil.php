@@ -12,18 +12,17 @@ $menu = [
 ];
 ?>
 
-<?= partial('components/topbar', ['title' => 'Profil', 'right' => bell_btn()]) ?>
-
 <div class="profile-head">
+    <div class="profile-bell"><?= bell_btn() ?></div>
     <?= avatar($name, 88) ?>
     <h2><?= esc($name) ?></h2>
     <p class="email"><?= esc($me['email']) ?> · <?= esc($me['phone']) ?></p>
-    <?php if ($me['verification_status'] === 'verified'): ?><span class="badge badge-green" style="margin-top:8px"><?= icon('badge-check', 14) ?> Akun terverifikasi</span><?php endif ?>
+    <?php if ($me['verification_status'] === 'verified'): ?><span class="profile-verified"><?= icon('badge-check', 18) ?> Akun terverifikasi</span><?php endif ?>
 </div>
 
 <div style="padding:0 20px"><?= partial('components/verify_banner', ['me' => $me]) ?></div>
 
-<div class="stats3" style="margin-top:8px">
+<div class="stats3">
     <?php foreach ($stats as $label => $v): ?><div class="stat"><b><?= esc((string) $v) ?></b><small><?= esc($label) ?></small></div><?php endforeach ?>
 </div>
 

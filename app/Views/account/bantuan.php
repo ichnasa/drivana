@@ -6,7 +6,7 @@ $faq = [
     ['Kenapa saya harus verifikasi identitas?', 'Demi keamanan penyewa dan pemilik mobil. Admin Drivana memeriksa KTP, SIM, dan selfie sebelum kamu bisa memesan.'],
     ['Apakah pesanan bisa dibatalkan?', 'Bisa, gratis sebelum sewa dimulai. Dana dikembalikan penuh ke metode pembayaranmu.'],
     ['Bagaimana pembayaran bekerja?', 'Pembayaran diproses lewat payment gateway. Setelah berhasil, pesananmu menunggu konfirmasi mitra.'],
-    ['Apa itu Premium untuk mitra?', 'Langganan yang membuka analisis wilayah, rekomendasi harga, analitik rental, dan boost listing.'],
+    ['Apa itu Premium untuk mitra?', 'Langganan yang membuka rekomendasi harga, analitik rental, dan boost listing.'],
 ];
 $e = fn (string $k) => form_error($k);
 ?>

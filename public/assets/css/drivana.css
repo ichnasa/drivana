@@ -612,3 +612,115 @@ a.car-card:hover { box-shadow: 0 4px 14px rgba(16, 24, 40, .12); }
 .bottom-nav { background: var(--surface); }
 .bottom-nav a.is-active span { border-bottom-color: transparent; }
 .topbar h1 { color: var(--ink); }
+
+/* ═════════ Figma screens: gradient headers, white soft cards, glass auth ═════════ */
+:root { --grad-head: linear-gradient(180deg, #0a2a6e 0%, #0d3a8c 45%, #1565d8 100%); --card-shadow: 0 2px 8px rgba(16, 24, 40, .08); }
+.card, .car-card, .car-row, .order, .rsv, .u-card, .fleet-card, .conv, .menu-group, .vehicle-strip { background: #fff; box-shadow: var(--card-shadow); border-radius: var(--r-4); }
+a.car-card:hover, a.car-row:hover, a.fleet-card:hover, a.conv:hover { box-shadow: 0 4px 14px rgba(16, 24, 40, .12); }
+.input { background: #fff; border-radius: var(--r-3); box-shadow: var(--card-shadow); }
+.input:hover { box-shadow: var(--card-shadow); }
+.input:focus-within { box-shadow: inset 0 0 0 2px var(--brand); }
+.input.has-error { background: var(--error-soft); }
+
+/* Page header: navy → blue, white title */
+.topbar { min-height: 84px; padding: 28px 20px 16px; background: var(--grad-head); box-shadow: none; color: #fff; }
+.topbar h1 { color: #fff; font-size: 20px; line-height: 28px; font-weight: 700; }
+.topbar p { color: rgba(255, 255, 255, .8); }
+.topbar .icon-btn { color: #fff; background: rgba(255, 255, 255, .16); }
+.topbar .icon-btn:hover { background: rgba(255, 255, 255, .26); }
+.topbar .icon-btn .dot { box-shadow: 0 0 0 2px #0d3a8c; }
+
+.bottom-nav { background: #fff; box-shadow: 0 -2px 12px rgba(16, 24, 40, .06); height: 68px; }
+.bottom-nav a { color: var(--ink); }
+.bottom-nav a:hover { color: var(--brand); }
+.bottom-nav a.is-active, .bottom-nav a.is-active .icon { color: var(--brand-accent); }
+.sticky-cta { background: var(--surface); box-shadow: 0 -2px 12px rgba(16, 24, 40, .06); }
+.sticky-cta .btn-primary, .btn-cta { background: linear-gradient(90deg, #0a2a6e, #0059bb); box-shadow: 0 6px 14px rgba(0, 89, 187, .3); border-radius: var(--r-4); }
+.btn-outline { box-shadow: inset 0 0 0 1px #1f2937; background: #fff; }
+.btn-secondary, .btn-soft { background: #e5e7eb; }
+
+/* Detail */
+.hero-photo { height: 220px; margin: var(--s-4) 20px 0; border-radius: var(--r-4); }
+.detail-card { padding: var(--s-5) var(--s-4); }
+.detail-head h2 { font-size: 22px; line-height: 30px; font-weight: 700; }
+.detail-head .price b { color: var(--brand-accent); }
+
+/* Orders */
+.order-top b { font-size: 16px; letter-spacing: 0; color: var(--ink); }
+.order-main { align-items: center; }
+.order-main .photo { width: 116px; height: 68px; }
+.order-main h3 { font-size: 18px; line-height: 26px; font-weight: 700; }
+.order .kv { margin-top: var(--s-3); padding: var(--s-3) var(--s-4); border-radius: var(--r-3); background: var(--surface); }
+
+/* Profile */
+.profile-head { position: relative; align-items: center; gap: var(--s-1); padding: var(--s-6) 20px var(--s-6); background: linear-gradient(180deg, #0a2a6e 0%, #1565d8 60%, #38b6ff 100%); color: #fff; text-align: center; }
+.profile-head .avatar { background: rgba(255, 255, 255, .2); box-shadow: 0 0 0 3px rgba(255, 255, 255, .5); }
+.profile-head h2 { margin-top: var(--s-3); color: #fff; }
+.profile-head .email { color: rgba(255, 255, 255, .85); }
+.profile-bell { align-self: flex-end; }
+.profile-bell .icon-btn { color: #fff; }
+.profile-verified { display: inline-flex; align-items: center; gap: 6px; margin-top: var(--s-3); padding: 10px var(--s-6); border-radius: var(--r-3); background: rgba(255, 255, 255, .2); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35); font-weight: 700; }
+.stats3 { gap: var(--s-3); margin: var(--s-4) 20px 0; padding: 0; }
+.stat { padding: var(--s-3); border-radius: var(--r-3); background: #fff; box-shadow: var(--card-shadow); text-align: center; }
+.stat b { color: var(--info); }
+.stat:nth-child(3) b { color: var(--warning); }
+.menu-group .row .icon:first-child { color: var(--ink); }
+
+/* Mitra dashboard */
+.mitra-hero { padding: var(--s-2) 20px var(--s-5); background: linear-gradient(180deg, #0a2a6e 0%, #1565d8 100%); color: #fff; }
+.mitra-hero .greet { padding: var(--s-3) 0 var(--s-4); }
+.mitra-hero .greet small { color: rgba(255, 255, 255, .85); }
+.mitra-hero .greet b { font-size: 20px; line-height: 28px; font-weight: 700; color: #fff; }
+.mitra-hero .icon-btn { color: #fff; background: rgba(255, 255, 255, .18); }
+.mitra-hero .avatar { background: rgba(255, 255, 255, .22); }
+.glass-card { display: flex; align-items: center; justify-content: space-between; padding: var(--s-5) var(--s-4); border-radius: var(--r-4); background: rgba(255, 255, 255, .14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3); }
+.glass-card small { display: block; font-size: 14px; line-height: 20px; }
+.glass-card strong { display: block; font-size: 44px; line-height: 52px; font-weight: 700; }
+.glass-ico { display: grid; place-items: center; width: 64px; height: 64px; border-radius: var(--r-4); background: rgba(255, 255, 255, .2); }
+.kpi { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); margin-top: var(--s-4); padding: var(--s-5) var(--s-4); }
+.kpi small { display: block; font-size: 14px; line-height: 20px; color: var(--muted); }
+.kpi strong { display: block; margin: 2px 0 var(--s-2); font-size: 24px; line-height: 32px; font-weight: 700; color: var(--brand); }
+.kpi-ico, .tile-ico { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--r-3); background: var(--info-soft); color: var(--brand); flex: none; }
+.stat-row { gap: var(--s-3); }
+.stat-row > div { padding: var(--s-4); border-radius: var(--r-3); background: #fff; box-shadow: var(--card-shadow); }
+.stat-row small { font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.tile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+.tile { display: flex; flex-direction: column; align-items: center; gap: var(--s-3); padding: var(--s-5) var(--s-3); text-align: center; }
+.tile b { font-size: 14px; line-height: 20px; font-weight: 700; color: var(--ink-2); }
+.tile-ico { width: 48px; height: 48px; }
+
+/* Auth: full-bleed gradient, glass fields, white primary button */
+.app.auth { background: linear-gradient(175deg, #0a2a6e 0%, #0b4aa3 50%, #38b6ff 100%); color: #fff; }
+.auth .logo-box { width: 68px; height: 68px; border-radius: 20px; background: rgba(255, 255, 255, .18); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3); }
+.auth .logo-box::before { width: 40px; height: 32px; background: #fff; }
+.auth .logo-box.icon-box { color: #fff; }
+.auth h1, .auth .title { color: #fff; font-size: 32px; line-height: 40px; }
+.auth .lead { color: rgba(255, 255, 255, .9); }
+.auth .field > label { color: rgba(255, 255, 255, .92); }
+.auth .input { background: rgba(255, 255, 255, .16); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .32); color: rgba(255, 255, 255, .85); }
+.auth .input:hover { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .5); }
+.auth .input input { color: #fff; }
+.auth .input input::placeholder { color: rgba(255, 255, 255, .7); }
+.auth .input:focus-within { background: rgba(255, 255, 255, .26); box-shadow: inset 0 0 0 2px #fff; color: #fff; }
+.auth .input.has-error { background: rgba(239, 68, 68, .28); box-shadow: inset 0 0 0 2px #fecaca; color: #fff; }
+.auth .field-error { color: #fecaca; }
+.auth .field-hint { color: rgba(255, 255, 255, .8); }
+.auth .btn-primary { background: #fff; color: var(--brand); box-shadow: none; }
+.auth .btn-primary:hover { background: var(--brand-soft); }
+.auth .btn-secondary, .auth .btn-outline { background: rgba(255, 255, 255, .16); color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .32); }
+.auth .btn-secondary:hover { background: rgba(255, 255, 255, .26); }
+.auth .link-right, .auth .foot a, .auth .link { color: #fff; }
+.auth .divider, .auth .foot { color: rgba(255, 255, 255, .8); }
+.auth .divider::before, .auth .divider::after { background: rgba(255, 255, 255, .45); }
+.auth .badge-black { background: rgba(255, 255, 255, .2); color: #fff; }
+.auth .alert { background: rgba(255, 255, 255, .95); }
+.auth .stepper .s { background: rgba(255, 255, 255, .2); box-shadow: none; color: #fff; }
+.auth .stepper .s.is-done, .auth .stepper .s.is-current { background: #fff; color: var(--brand); }
+.auth .stepper .bar { background: rgba(255, 255, 255, .35); }
+.auth .stepper .bar.is-done { background: #fff; }
+.auth .panel h4, .auth label { color: #fff; }
+.auth .demo { color: var(--ink); }
+.hero-photo .badge-black { background: var(--brand); color: #fff; }
+.detail-head .price { white-space: nowrap; }
+.auth .muted, .auth .hint { color: rgba(255, 255, 255, .8); }
+.auth .demo .muted { color: var(--muted); }

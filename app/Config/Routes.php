@@ -104,7 +104,6 @@ $routes->group('mitra', ['filter' => 'auth:mitra'], static function ($routes) {
 $routes->group('mitra', ['filter' => ['auth:mitra', 'premium']], static function ($routes) {
     $routes->get('boost', 'MitraPremium::boost');
     $routes->post('boost/beli', 'MitraPremium::beliBoost');
-    $routes->get('analisis-wilayah', 'MitraPremium::wilayah');
     $routes->get('rekomendasi-harga', 'MitraPremium::harga');
     $routes->post('rekomendasi-harga/terapkan', 'MitraPremium::terapkanHarga');
     $routes->get('analitik', 'MitraPremium::analitik');

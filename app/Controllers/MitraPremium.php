@@ -83,13 +83,6 @@ class MitraPremium extends BaseController
 
     /* ───────── premium analytics ───────── */
 
-    public function wilayah(): string
-    {
-        $period = $this->period();
-
-        return view('mitra/wilayah', ['title' => 'Analisis wilayah', 'role' => 'mitra', 'nav' => false, 'period' => $period, 'periods' => Insights::PERIODS, 'd' => Insights::demand($period)]);
-    }
-
     public function harga(): string
     {
         $cars = $this->approvedCars();

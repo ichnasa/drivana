@@ -27,7 +27,6 @@ class Drivana
     ];
 
     public const PLAN_FEATURES = [
-        ['icon' => 'map', 'title' => 'Analisis wilayah', 'text' => 'Lihat area dengan permintaan sewa tertinggi.'],
         ['icon' => 'circle-dollar-sign', 'title' => 'Rekomendasi harga', 'text' => 'Harga sewa mengikuti pasar dan permintaan.'],
         ['icon' => 'chart-line', 'title' => 'Analitik rental', 'text' => 'Booking, rating, dan pendapatan per periode.'],
         ['icon' => 'rocket', 'title' => 'Boost listing', 'text' => 'Tampil di urutan teratas hasil pencarian.'],
