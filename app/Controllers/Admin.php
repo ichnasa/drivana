@@ -165,15 +165,18 @@ class Admin extends BaseController
         $tab = $this->request->getGet('tab') === 'langganan' ? 'langganan' : 'booking';
         $status = (string) $this->request->getGet('status');
         $q = mb_strtolower(trim((string) $this->request->getGet('q')));
+        $date = fn (string $k) => preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $this->request->getGet($k)) ? (string) $this->request->getGet($k) : '';
+        [$from, $to] = [$date('dari'), $date('sampai')];
+        $inRange = fn (array $r) => ($from === '' || substr($r['created_at'], 0, 10) >= $from) && ($to === '' || substr($r['created_at'], 0, 10) <= $to);
 
         if ($tab === 'booking') {
-            $rows = Store::where('bookings', fn ($b) => ($status === '' || $b['status'] === $status));
-            $rows = array_map(fn ($b) => $b + ['customer' => $this->user((int) $b['customer_id'])['name'], 'mitra' => $this->user((int) $b['mitra_id'])['business_name'], 'car' => Store::get('cars', (int) $b['car_id'])['name']], $rows);
+            $rows = Store::where('bookings', fn ($b) => ($status === '' || $b['status'] === $status) && $inRange($b));
+            $rows = array_map(fn ($b) => $b + ['customer' => $this->user((int) $b['customer_id'])['name'], 'mitra' => $this->user((int) $b['mitra_id'])['business_name'], 'car' => Store::get('cars', (int) $b['car_id'])['name'], 'pay' => $this->lastPayment((int) $b['id'])['status'] ?? null], $rows);
             if ($q !== '') {
                 $rows = array_filter($rows, fn ($b) => str_contains(mb_strtolower($b['code'] . ' ' . $b['customer'] . ' ' . $b['mitra'] . ' ' . $b['car']), $q));
             }
         } else {
-            $rows = Store::where('payments', fn ($p) => in_array($p['kind'], ['subscription', 'boost'], true) && ($status === '' || $p['status'] === $status));
+            $rows = Store::where('payments', fn ($p) => in_array($p['kind'], ['subscription', 'boost'], true) && ($status === '' || $p['status'] === $status) && $inRange($p));
             $rows = array_map(fn ($p) => $p + ['mitra' => $this->user((int) $p['user_id'])['business_name'], 'car' => $p['car_id'] ? Store::get('cars', (int) $p['car_id'])['name'] : null], $rows);
             if ($q !== '') {
                 $rows = array_filter($rows, fn ($p) => str_contains(mb_strtolower($p['ref'] . ' ' . $p['mitra']), $q));
@@ -182,7 +185,26 @@ class Admin extends BaseController
         $rows = array_values($rows);
         usort($rows, fn ($a, $b) => strcmp($b['created_at'], $a['created_at']));
 
-        return view('admin/transaksi', ['title' => 'Transaksi', 'tab' => $tab, 'status' => $status, 'q' => $q, 'rows' => array_slice($rows, 0, 60), 'total' => count($rows)] + $this->nav('transaksi'));
+        return view('admin/transaksi', ['title' => 'Transaksi', 'tab' => $tab, 'status' => $status, 'q' => $q, 'from' => $from, 'to' => $to, 'rows' => array_slice($rows, 0, 60), 'total' => count($rows)] + $this->nav('transaksi'));
+    }
+
+    private function lastPayment(int $bookingId): ?array
+    {
+        $rows = Store::where('payments', fn ($p) => (int) $p['booking_id'] === $bookingId);
+        usort($rows, fn ($a, $b) => $b['id'] <=> $a['id']);
+
+        return $rows[0] ?? null;
+    }
+
+    public function transaksiDetail(string $code): string
+    {
+        $b = Store::first('bookings', fn ($x) => $x['code'] === $code) ?? $this->notFound();
+
+        return view('admin/transaksi_detail', [
+            'title' => 'Transaksi ' . $b['code'], 'b' => $b, 'car' => Store::get('cars', (int) $b['car_id']),
+            'customer' => $this->user((int) $b['customer_id']), 'mitra' => $this->user((int) $b['mitra_id']), 'payment' => $this->lastPayment((int) $b['id']),
+            'review' => Store::first('reviews', fn ($r) => (int) $r['booking_id'] === (int) $b['id']),
+        ] + $this->nav('transaksi'));
     }
 
     /* ───────── users ───────── */

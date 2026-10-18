@@ -18,6 +18,15 @@ class PaymentService
         return Store::first('payments', fn ($p) => $p['ref'] === $ref);
     }
 
+    /** The paid (or later refunded) payment of a booking: the one that has a receipt. */
+    public function forBooking(int $bookingId): ?array
+    {
+        $rows = Store::where('payments', fn ($p) => (int) $p['booking_id'] === $bookingId && in_array($p['status'], ['paid', 'refunded'], true));
+        usort($rows, fn ($a, $b) => $b['id'] <=> $a['id']);
+
+        return $rows[0] ?? null;
+    }
+
     public function create(int $userId, string $kind, int $amount, string $method, array $extra = []): array
     {
         do {
@@ -54,14 +63,15 @@ class PaymentService
         return true;
     }
 
-    public function fail(string $ref): bool
+    /** The user backed out of paying (not a technical failure). */
+    public function cancel(string $ref): bool
     {
         $p = $this->find($ref);
         if (! $p || $p['status'] !== 'pending') {
             return false;
         }
-        Store::update('payments', (int) $p['id'], ['status' => 'failed', 'updated_at' => Drivana::now()]);
-        Notifier::to((int) $p['user_id'], 'Pembayaran gagal', 'Pembayaran ' . $p['ref'] . ' tidak berhasil. Coba lagi.', null);
+        Store::update('payments', (int) $p['id'], ['status' => 'cancelled', 'updated_at' => Drivana::now()]);
+        Notifier::to((int) $p['user_id'], 'Pembayaran dibatalkan', 'Kamu membatalkan pembayaran ' . $p['ref'] . '.', null);
 
         return true;
     }

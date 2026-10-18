@@ -32,6 +32,7 @@ $net = $b['total'] - $b['service_fee'];
         <div class="sum-row"><span>Total dibayar penyewa</span><span><?= rupiah($b['total']) ?></span></div>
         <div class="sum-row"><span>Biaya layanan Drivana</span><span>−<?= rupiah($b['service_fee']) ?></span></div>
         <div class="sum-row total"><span>Untukmu</span><b><?= rupiah($net) ?></b></div>
+        <?php if ($receipt): ?><a class="btn btn-secondary btn-sm" style="margin-top:12px" href="<?= site_url('bukti/' . $receipt['ref']) ?>"><?= icon('receipt', 18) ?> Lihat bukti pembayaran</a><?php endif ?>
     </div>
 
     <?php if ($rv): ?><div class="panel"><h4>Ulasan penyewa</h4><div class="review"><?= stars((float) $rv['rating']) ?><?php if ($rv['comment']): ?><p>“<?= esc($rv['comment']) ?>”</p><?php endif ?></div></div><?php endif ?>

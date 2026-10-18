@@ -52,7 +52,7 @@ $days = $subscription ? max(0, (int) ceil((strtotime($subscription['ends_at']) -
 
     <?php if ($history): ?>
         <div class="panel"><h4>Riwayat langganan</h4>
-            <?php foreach ($history as $h): ?><div class="sum-row"><span><?= esc(Drivana::PLANS[$h['plan']]['name']) ?> · <?= date_id($h['starts_at'], false) ?> – <?= date_id($h['ends_at'], false) ?></span><span><?= rupiah($h['price']) ?></span></div><?php endforeach ?>
+            <?php foreach ($history as $h): ?><div class="sum-row"><span><?= esc(Drivana::PLANS[$h['plan']]['name']) ?> · <?= date_id($h['starts_at'], false) ?> – <?= date_id($h['ends_at'], false) ?></span><span><?= rupiah($h['price']) ?><?php if ($h['ref']): ?> · <a href="<?= site_url('bukti/' . $h['ref']) ?>">Bukti</a><?php endif ?></span></div><?php endforeach ?>
         </div>
     <?php endif ?>
 </div>

@@ -63,6 +63,20 @@ class FormRules
         return $out;
     }
 
+    public static function otpRequest(): array
+    {
+        return ['identity' => self::login()['identity']];
+    }
+
+    public static function otpCode(): array
+    {
+        return ['code' => ['label' => 'Kode OTP', 'rules' => 'required|exact_length[6]|numeric', 'errors' => [
+            'required' => 'Kode OTP wajib diisi.',
+            'exact_length' => 'Kode OTP terdiri dari 6 angka.',
+            'numeric' => 'Kode OTP hanya berisi angka.',
+        ]]];
+    }
+
     public static function login(): array
     {
         return [

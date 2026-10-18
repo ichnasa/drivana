@@ -9,6 +9,8 @@ class Drivana
     public const SERVICE_FEE          = 15000;
     public const MAX_DAYS             = 30;
     public const PAY_WINDOW_MINUTES   = 30;
+    public const OTP_CODE             = '123456';
+    public const OTP_TTL_SECONDS      = 300;
 
     public const AREAS = [
         'Jakarta Pusat', 'Jakarta Selatan', 'Tangerang Selatan', 'Bekasi Utara',
@@ -19,6 +21,9 @@ class Drivana
     public const SEAT_OPTIONS = [2, 4, 5, 7, 9, 12];
     public const TRANSMISSION = ['Manual', 'Automatic'];
     public const FUEL         = ['Bensin', 'Diesel', 'Listrik', 'Hybrid'];
+
+    /** Drivers assigned to bookings that include a driver (picked by booking id). */
+    public const DRIVERS = ['Pak Slamet', 'Pak Anwar', 'Pak Hendra', 'Pak Rudi', 'Pak Joko', 'Pak Syahrul'];
 
     /** Subscription plans (Mitra premium). */
     public const PLANS = [
@@ -113,6 +118,11 @@ class Drivana
     public static function home(string $role): string
     {
         return ['customer' => 'beranda', 'mitra' => 'mitra/dashboard', 'admin' => 'admin/dashboard'][$role] ?? 'login';
+    }
+
+    public static function driverName(int $bookingId): string
+    {
+        return self::DRIVERS[$bookingId % count(self::DRIVERS)];
     }
 
     public static function now(): string

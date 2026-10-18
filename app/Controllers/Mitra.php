@@ -230,9 +230,9 @@ class Mitra extends BaseController
         $b['car'] = Store::get('cars', (int) $b['car_id']);
         $b['customer'] = Store::get('users', (int) $b['customer_id']);
         $b['review'] = Store::first('reviews', fn ($r) => (int) $r['booking_id'] === (int) $b['id']);
-        $b['conversation'] = Store::first('conversations', fn ($c) => (int) $c['customer_id'] === (int) $b['customer_id'] && (int) $c['mitra_id'] === $this->uid());
+        $b['conversation'] = Store::first('conversations', fn ($c) => (int) $c['customer_id'] === (int) $b['customer_id'] && (int) $c['mitra_id'] === $this->uid() && ($c['kind'] ?? 'mitra') === 'mitra');
 
-        return view('mitra/reservasi_detail', ['title' => 'Pesanan ' . $b['code'], 'role' => 'mitra', 'b' => $b, 'nav' => false]);
+        return view('mitra/reservasi_detail', ['title' => 'Pesanan ' . $b['code'], 'role' => 'mitra', 'b' => $b, 'nav' => false, 'receipt' => (new \App\Libraries\PaymentService())->forBooking((int) $b['id'])]);
     }
 
     public function aksi(string $code, string $action)

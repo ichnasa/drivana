@@ -4,7 +4,7 @@
 
 <header class="topbar">
     <a class="icon-btn" href="<?= site_url($base) ?>" aria-label="Kembali"><?= icon('arrow-left', 22) ?></a>
-    <div class="contact"><?= avatar($c['other_name'], 40) ?><div><b><?= esc($c['other_name']) ?></b><small><?= $role === 'mitra' ? 'Penyewa' : 'Mitra rental' ?></small></div></div>
+    <div class="contact"><?= avatar($c['other_name'], 40) ?><div><b><?= esc($c['other_name']) ?></b><small><?= esc($c['sub_label']) ?></small></div></div>
 </header>
 
 <?php if ($c['car_name']): ?>

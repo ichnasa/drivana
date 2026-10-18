@@ -21,6 +21,7 @@
     <a class="link-right" href="#">Lupa password?</a>
     <button class="btn btn-primary" type="submit"><span>Masuk</span></button>
 </form>
+<a class="btn btn-secondary" style="margin-top:12px" href="<?= site_url('login/otp') ?>"><?= icon('key-round', 20) ?> Masuk dengan kode OTP</a>
 
 <div class="divider">atau</div>
 <a class="btn btn-secondary" href="<?= site_url('mitra/login') ?>"><?= icon('store', 20) ?> Masuk sebagai mitra</a>

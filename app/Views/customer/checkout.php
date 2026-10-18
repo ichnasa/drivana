@@ -19,7 +19,7 @@ $sel = old_input('method', 'bank');
         <small>Total yang harus dibayar</small>
         <strong data-pay-total data-base="<?= $sub ?>"><?= rupiah($b['total']) ?></strong>
         <span class="badge"><?= esc($b['car']['name']) ?> · <?= $b['days'] ?> hari<?= $b['with_driver'] ? ' · dengan pengemudi' : '' ?></span>
-        <p class="field-hint" style="margin-top:8px">Selesaikan sebelum <b data-countdown="<?= esc($b['expires_at'], 'attr') ?>"><?= date('H.i', strtotime($b['expires_at'])) ?></b>, atau pesanan dibatalkan otomatis.</p>
+        <p class="field-hint" style="margin-top:8px">Selesaikan sebelum <b data-countdown="<?= date('c', strtotime($b['expires_at'])) ?>"><?= date('H.i', strtotime($b['expires_at'])) ?></b>, atau pesanan dibatalkan otomatis.</p>
     </div>
 
     <div class="card-soft" style="padding:16px;font-size:14px">

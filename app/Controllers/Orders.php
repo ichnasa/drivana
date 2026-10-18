@@ -54,7 +54,7 @@ class Orders extends BaseController
     {
         $b = $this->withCar($this->mine($code));
 
-        return view('customer/pesanan_detail', ['title' => 'Pesanan ' . $b['code'], 'b' => $b, 'nav' => false]);
+        return view('customer/pesanan_detail', ['title' => 'Pesanan ' . $b['code'], 'b' => $b, 'nav' => false, 'receipt' => (new PaymentService())->forBooking((int) $b['id'])]);
     }
 
     public function cancel(string $code)
@@ -90,6 +90,34 @@ class Orders extends BaseController
         Notifier::to((int) $b['mitra_id'], 'Ulasan baru', 'Penyewa memberi ' . $rating . ' bintang untuk pesanan ' . $b['code'] . '.', 'mitra/reservasi/' . $b['code']);
 
         return redirect()->to($to)->with('success', 'Terima kasih atas ulasanmu!');
+    }
+
+    /* ───────── digital receipt ───────── */
+
+    /** Receipt for a paid payment: its payer, the booking's mitra, or an admin. */
+    public function bukti(string $ref): string
+    {
+        $p = (new PaymentService())->find($ref);
+        $me = (int) session('user')['id'];
+        $b = ($p && $p['booking_id']) ? Store::get('bookings', (int) $p['booking_id']) : null;
+        $allowed = $p && in_array($p['status'], ['paid', 'refunded'], true)
+            && ((int) $p['user_id'] === $me || ($b && (int) $b['mitra_id'] === $me) || $this->role() === 'admin');
+        if (! $allowed) {
+            $this->notFound();
+        }
+
+        $back = match ($this->role()) {
+            'admin'  => 'admin/transaksi' . ($b ? '' : '?tab=langganan'),
+            'mitra'  => $b ? 'mitra/reservasi/' . $b['code'] : ($p['kind'] === 'boost' ? 'mitra/boost' : 'mitra/langganan'),
+            default  => 'pesanan/' . $b['code'],
+        };
+
+        return view('customer/bukti', [
+            'title' => 'Bukti pembayaran', 'p' => $p, 'b' => $b, 'back' => $back, 'nav' => false, 'role' => $this->role(),
+            'car'   => Store::get('cars', (int) ($b['car_id'] ?? $p['car_id'] ?? 0)),
+            'payer' => Store::get('users', (int) $p['user_id']),
+            'method' => array_values(array_filter(Drivana::PAYMENT_METHODS, fn ($m) => $m['key'] === $p['method']))[0]['name'] ?? $p['method'],
+        ]);
     }
 
     /* ───────── checkout ───────── */
@@ -173,9 +201,9 @@ class Orders extends BaseController
         $svc = new PaymentService();
         $ok = $result === 'berhasil';
         if ($p['status'] === 'pending') {
-            $ok ? $svc->succeed($ref) : $svc->fail($ref);
+            $ok ? $svc->succeed($ref) : $svc->cancel($ref);
         }
 
-        return redirect()->to($this->afterPay($p, $ok))->with($ok ? 'success' : 'error', $ok ? 'Pembayaran berhasil.' : 'Pembayaran gagal. Silakan coba lagi.');
+        return redirect()->to($this->afterPay($p, $ok))->with('success', $ok ? 'Pembayaran berhasil.' : 'Pembayaran dibatalkan.');
     }
 }

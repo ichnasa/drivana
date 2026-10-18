@@ -14,15 +14,24 @@ $routes->get('mitra/login', 'Auth::mitraLogin');
 $routes->post('mitra/login', 'Auth::doMitraLogin');
 $routes->get('mitra/register', 'Auth::mitraRegister');
 $routes->post('mitra/register', 'Auth::doMitraRegister');
+$routes->get('login/otp', 'Auth::otp/customer');
+$routes->post('login/otp', 'Auth::doOtp/customer');
+$routes->get('login/otp/kode', 'Auth::otpKode/customer');
+$routes->post('login/otp/kode', 'Auth::doOtpKode/customer');
+$routes->get('mitra/login/otp', 'Auth::otp/mitra');
+$routes->post('mitra/login/otp', 'Auth::doOtp/mitra');
+$routes->get('mitra/login/otp/kode', 'Auth::otpKode/mitra');
+$routes->post('mitra/login/otp/kode', 'Auth::doOtpKode/mitra');
 $routes->post('logout', 'Auth::logout');
 $routes->post('demo/reset', 'Demo::reset');
 $routes->get('kredit', 'Pages::kredit');
 
-// Any signed-in user: private documents + the simulated payment gateway
+// Any signed-in user: private documents + payment receipts + the payment gateway
 $routes->group('', ['filter' => 'auth:any'], static function ($routes) {
     $routes->get('berkas/(:num)', 'Files::document/$1');
+    $routes->get('bukti/(:segment)', 'Orders::bukti/$1');
     $routes->get('gateway/(:segment)', 'Orders::gateway/$1');
-    $routes->post('gateway/(:segment)/(berhasil|gagal)', 'Orders::gatewayResult/$1/$2');
+    $routes->post('gateway/(:segment)/(berhasil|batal)', 'Orders::gatewayResult/$1/$2');
 });
 
 // ───────── Customer ─────────
@@ -46,6 +55,7 @@ $routes->group('', ['filter' => 'auth:customer'], static function ($routes) {
 
     $routes->get('chat', 'Chat::index');
     $routes->get('chat/mulai/(:num)', 'Chat::start/$1');
+    $routes->get('chat/pengemudi/(:segment)', 'Chat::startDriver/$1');
     $routes->get('chat/(:num)', 'Chat::show/$1');
     $routes->post('chat/(:num)/kirim', 'Chat::send/$1');
     $routes->get('chat/(:num)/pesan', 'Chat::poll/$1');
@@ -119,6 +129,7 @@ $routes->group('admin', ['filter' => 'auth:admin'], static function ($routes) {
     $routes->post('mobil/(:num)/setujui', 'Admin::setujuiMobil/$1');
     $routes->post('mobil/(:num)/tolak', 'Admin::tolakMobil/$1');
     $routes->get('transaksi', 'Admin::transaksi');
+    $routes->get('transaksi/(:segment)', 'Admin::transaksiDetail/$1');
     $routes->get('pengguna', 'Admin::pengguna');
     $routes->post('pengguna/(:num)/status', 'Admin::statusPengguna/$1');
     $routes->get('keluhan', 'Admin::keluhan');

@@ -18,6 +18,7 @@
     <a class="link-right" href="#">Lupa password?</a>
     <button class="btn btn-primary" type="submit"><span>Masuk</span></button>
 </form>
+<a class="btn btn-secondary" style="margin-top:12px" href="<?= site_url('mitra/login/otp') ?>"><?= icon('key-round', 20) ?> Masuk dengan kode OTP</a>
 
 <div class="notice"><?= icon('info', 18) ?> Hanya untuk pemilik armada. Akun harus sudah diverifikasi tim Drivana.</div>
 

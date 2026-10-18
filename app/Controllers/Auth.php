@@ -88,6 +88,91 @@ class Auth extends BaseController
         return redirect()->to(Drivana::home($u['role']));
     }
 
+    /* ───────── OTP login (both portals) ───────── */
+
+    private function otpPortal(string $portal): array
+    {
+        return $portal === 'mitra'
+            ? ['roles' => ['mitra'], 'base' => 'mitra/login', 'label' => 'Email / No. HP bisnis']
+            : ['roles' => ['customer', 'admin'], 'base' => 'login', 'label' => 'Email / No. HP'];
+    }
+
+    public function otp(string $portal)
+    {
+        $p = $this->otpPortal($portal);
+
+        return $this->guest() ?? view('auth/otp_request', ['title' => 'Masuk dengan OTP', 'portal' => $portal, 'base' => $p['base'], 'label' => $p['label']]);
+    }
+
+    public function doOtp(string $portal)
+    {
+        $p = $this->otpPortal($portal);
+        $to = $p['base'] . '/otp';
+        if (! $this->validate(FormRules::otpRequest())) {
+            return $this->backWith($to, $this->validator->getErrors());
+        }
+        if ($wait = $this->lockedFor()) {
+            return $this->backWith($to, ['form' => "Terlalu banyak percobaan. Coba lagi dalam {$wait} detik."]);
+        }
+        $u = $this->findByIdentity((string) $this->request->getPost('identity'));
+        if (! $u || ! in_array($u['role'], $p['roles'], true)) {
+            $this->recordFailure();
+
+            return $this->backWith($to, ['identity' => 'Email/No. HP tidak terdaftar.']);
+        }
+        if ($u['status'] !== 'active') {
+            return $this->backWith($to, ['form' => 'Akun kamu dinonaktifkan. Hubungi admin Drivana.']);
+        }
+        session()->set('otp', ['uid' => (int) $u['id'], 'portal' => $portal, 'exp' => time() + Drivana::OTP_TTL_SECONDS]);
+
+        return redirect()->to($to . '/kode');
+    }
+
+    /** The pending OTP request for this portal, or null when missing/expired. */
+    private function pendingOtp(string $portal): ?array
+    {
+        $o = session('otp');
+
+        return (is_array($o) && $o['portal'] === $portal && $o['exp'] > time()) ? $o : null;
+    }
+
+    public function otpKode(string $portal)
+    {
+        $p = $this->otpPortal($portal);
+        $o = $this->pendingOtp($portal);
+        if (! $o) {
+            return redirect()->to($p['base'] . '/otp')->with('error', 'Sesi OTP berakhir. Minta kode baru.');
+        }
+        $u = Store::get('users', $o['uid']);
+
+        return view('auth/otp_verify', ['title' => 'Verifikasi OTP', 'portal' => $portal, 'base' => $p['base'], 'phone' => $u['phone'], 'otp' => Drivana::OTP_CODE]);
+    }
+
+    public function doOtpKode(string $portal)
+    {
+        $p = $this->otpPortal($portal);
+        $to = $p['base'] . '/otp/kode';
+        $o = $this->pendingOtp($portal);
+        if (! $o) {
+            return redirect()->to($p['base'] . '/otp')->with('error', 'Sesi OTP berakhir. Minta kode baru.');
+        }
+        if (! $this->validate(FormRules::otpCode())) {
+            return $this->backWith($to, $this->validator->getErrors());
+        }
+        if ($wait = $this->lockedFor()) {
+            return $this->backWith($to, ['form' => "Terlalu banyak percobaan. Coba lagi dalam {$wait} detik."]);
+        }
+        if (! hash_equals(Drivana::OTP_CODE, (string) $this->request->getPost('code'))) {
+            $this->recordFailure();
+
+            return $this->backWith($to, ['code' => 'Kode OTP salah.']);
+        }
+        session()->remove('otp');
+        $this->signIn(Store::get('users', $o['uid']));
+
+        return redirect()->to(Drivana::home($this->role()));
+    }
+
     private function createUser(array $data): int
     {
         $now = Drivana::now();

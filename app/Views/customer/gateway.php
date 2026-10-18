@@ -5,7 +5,7 @@ $what = match ($p['kind']) { 'booking' => 'Booking ' . ($b['code'] ?? ''), 'subs
 $va = '8808 ' . substr(preg_replace('/\D/', '', $p['ref']) . '0000000000', 0, 10);
 ?>
 
-<?= partial('components/topbar', ['title' => 'Payment Gateway', 'sub' => 'Simulasi pembayaran · tidak ada uang sungguhan']) ?>
+<?= partial('components/topbar', ['title' => 'Payment Gateway', 'sub' => 'Selesaikan pembayaran Anda']) ?>
 
 <div class="page stack" style="padding-top:20px">
     <?= partial('components/alerts') ?>
@@ -36,10 +36,10 @@ $va = '8808 ' . substr(preg_replace('/\D/', '', $p['ref']) . '0000000000', 0, 10
         <div><dt>Status</dt><dd><span class="badge badge-yellow">Menunggu pembayaran</span></dd></div>
     </dl>
 
-    <div class="notice"><?= icon('info', 18) ?> Ini halaman simulasi payment gateway. Tekan salah satu tombol untuk meniru notifikasi (webhook) dari penyedia pembayaran.</div>
+    <div class="notice"><?= icon('info', 18) ?> Selesaikan pembayaran sesuai metode di atas, lalu konfirmasi agar pesananmu diproses.</div>
 
-    <form action="<?= site_url('gateway/' . $p['ref'] . '/berhasil') ?>" method="post"><?= csrf_field() ?><button class="btn btn-primary" type="submit"><span>Simulasikan pembayaran berhasil</span></button></form>
-    <form action="<?= site_url('gateway/' . $p['ref'] . '/gagal') ?>" method="post"><?= csrf_field() ?><button class="btn btn-danger" type="submit"><span>Simulasikan pembayaran gagal</span></button></form>
+    <form action="<?= site_url('gateway/' . $p['ref'] . '/berhasil') ?>" method="post"><?= csrf_field() ?><button class="btn btn-primary" type="submit"><span>Saya sudah membayar</span></button></form>
+    <form action="<?= site_url('gateway/' . $p['ref'] . '/batal') ?>" method="post"><?= csrf_field() ?><button class="btn btn-danger" type="submit"><span>Batalkan pembayaran</span></button></form>
 </div>
 
 <?= $this->endSection() ?>

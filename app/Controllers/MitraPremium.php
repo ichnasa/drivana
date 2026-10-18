@@ -40,7 +40,7 @@ class MitraPremium extends BaseController
 
         return view('mitra/langganan', [
             'title' => 'Langganan Premium', 'role' => 'mitra', 'nav' => false, 'me' => $this->me(),
-            'subscription' => (new PaymentService())->activeSubscription($this->uid()), 'history' => array_slice($history, 0, 5),
+            'subscription' => (new PaymentService())->activeSubscription($this->uid()), 'history' => array_map(fn ($h) => $h + ['ref' => ($h['payment_id'] ?? null) ? (Store::get('payments', (int) $h['payment_id'])['ref'] ?? null) : null], array_slice($history, 0, 5)),
         ]);
     }
 

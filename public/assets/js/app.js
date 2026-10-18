@@ -339,7 +339,7 @@
 
   // Payment countdown: [data-countdown="YYYY-MM-DD HH:MM:SS"]
   $$('[data-countdown]').forEach((el) => {
-    const target = new Date(el.dataset.countdown.replace(' ', 'T')).getTime();
+    const target = new Date(el.dataset.countdown).getTime();
     const tick = () => {
       const left = Math.max(0, Math.round((target - Date.now()) / 1000));
       el.textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0');
