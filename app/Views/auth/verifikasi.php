@@ -23,7 +23,7 @@
 
     <!-- 2: Selfie -->
     <section class="step-pane" data-step-pane>
-        <h1 class="title">Selfie</h1>
+        <h1 class="title">Verifikasi wajah</h1>
         <p class="lead">Wajah terlihat jelas, tanpa masker.</p>
         <div class="field" style="margin-top:24px">
             <label class="selfie<?= $selfieErr ? ' has-error' : '' ?>" data-upload style="cursor:pointer">
@@ -46,7 +46,7 @@
 
     <!-- 3: Confirm -->
     <section class="step-pane" data-step-pane>
-        <h1 class="title">Cek sebelum kirim</h1>
+        <h1 class="title">Konfirmasi data</h1>
         <p class="lead">Admin akan memeriksa dokumen ini.</p>
         <div style="margin-top:24px">
             <?php foreach (['Foto KTP' => 'id-card', 'Foto SIM' => 'car', 'Foto selfie' => 'scan-face'] as $doc => $ico): ?>

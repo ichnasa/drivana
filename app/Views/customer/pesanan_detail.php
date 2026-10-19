@@ -6,7 +6,7 @@ $cancelable = in_array($b['status'], ['pending_payment', 'menunggu', 'dikonfirma
 $ratingErr = form_error('rating'); $commentErr = form_error('comment');
 ?>
 
-<?= partial('components/topbar', ['title' => $b['code'], 'back' => site_url('pesanan'), 'sub' => \App\Libraries\Drivana::statusLabel($b['status'])]) ?>
+<?= partial('components/topbar', ['title' => $b['code'], 'back' => site_url('pesanan'), 'sub' => \App\Libraries\Drivana::statusLabel(\App\Libraries\Drivana::displayStatus($b))]) ?>
 
 <div class="page has-cta stack" style="padding-top:20px">
     <?= partial('components/alerts') ?>
@@ -47,7 +47,7 @@ $ratingErr = form_error('rating'); $commentErr = form_error('comment');
     </div>
 
     <?php if ($b['status'] === 'selesai'): ?>
-        <div class="panel">
+        <div class="panel" id="ulasan">
             <h4>Ulasan</h4>
             <?php if ($rv): ?>
                 <div class="review"><?= stars((float) $rv['rating']) ?><?php if ($rv['comment']): ?><p>“<?= esc($rv['comment']) ?>”</p><?php endif ?></div>

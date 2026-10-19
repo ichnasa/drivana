@@ -238,6 +238,22 @@
       modal.classList.add('is-open');
     })
   );
+  // Document viewer (admin): zoom, shrink, rotate, full screen
+  $$('[data-doc-viewer]').forEach((v) => {
+    const img = v.querySelector('[data-doc-img]');
+    let scale = 1; let turn = 0;
+    const paint = () => { img.style.transform = 'rotate(' + turn + 'deg) scale(' + scale + ')'; };
+    v.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-doc-act]');
+      if (!b) return;
+      const act = b.dataset.docAct;
+      if (act === 'in') scale = Math.min(4, scale + 0.25);
+      if (act === 'out') scale = Math.max(0.5, scale - 0.25);
+      if (act === 'rotate') turn = (turn + 90) % 360;
+      if (act === 'full') { const el = v.querySelector('.doc-stage'); if (el.requestFullscreen) el.requestFullscreen(); }
+      paint();
+    });
+  });
   // a modal whose form came back with a server error opens straight away
   $$('.modal').forEach((m) => { if ($$('.field-error', m).some((e) => e.textContent.trim() !== '')) m.classList.add('is-open'); });
   $$('[data-modal-close]').forEach((btn) =>
@@ -395,6 +411,24 @@
       lastId = Math.max(lastId, m.id);
     };
     bottom();
+    // Photo and location are shown in the thread only (UI demo, nothing is sent anywhere)
+    const local = (build) => {
+      const el = document.createElement('div');
+      el.className = 'bubble me is-new';
+      build(el);
+      const t = document.createElement('small'); t.textContent = new Date().toTimeString().slice(0, 5).replace(':', '.');
+      el.appendChild(t); body.appendChild(el); bottom();
+    };
+    const photo = chat.querySelector('[data-chat-photo]');
+    if (photo) photo.addEventListener('change', () => {
+      const f = photo.files[0]; if (!f || !f.type.startsWith('image/')) return;
+      local((el) => { const im = document.createElement('img'); im.className = 'chat-photo'; im.alt = 'Foto dikirim'; im.src = URL.createObjectURL(f); el.appendChild(im); });
+      photo.value = '';
+    });
+    const loc = chat.querySelector('[data-chat-location]');
+    if (loc) loc.addEventListener('click', () => {
+      local((el) => { const a = document.createElement('a'); a.className = 'loc'; a.textContent = 'Lokasi dibagikan'; a.href = 'https://www.google.com/maps?q=-6.2,106.816666'; a.target = '_blank'; a.rel = 'noopener'; el.appendChild(a); });
+    });
     chat.addEventListener('submit', async (e) => {
       e.preventDefault();
       const text = field.value.trim();
@@ -419,6 +453,35 @@
         } catch (err) { /* offline: try again next tick */ }
       }, 4000);
     }
+  }
+
+  // Saved addresses (display only): add / remove rows in the page
+  const addrList = document.querySelector('[data-address-list]');
+  if (addrList) {
+    addrList.addEventListener('click', (e) => { const b = e.target.closest('[data-address-remove]'); if (b) b.closest('.card').remove(); });
+    document.querySelector('[data-address-form]').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const label = document.getElementById('al-label'); const addr = document.getElementById('al-address');
+      if (!label.value.trim() || !addr.value.trim()) return;
+      const row = addrList.firstElementChild ? addrList.firstElementChild.cloneNode(true) : null;
+      if (!row) return;
+      row.querySelector('b').textContent = label.value.trim();
+      row.querySelector('p').textContent = addr.value.trim();
+      addrList.prepend(row);
+      label.value = ''; addr.value = '';
+    });
+  }
+
+  // Voice call screen: rings, then "connected" with a running timer; the six controls toggle
+  const callStatus = document.querySelector('[data-call-status]');
+  if (callStatus) {
+    const clock = document.querySelector('[data-call-time]');
+    let sec = 0;
+    setTimeout(() => {
+      callStatus.textContent = 'Tersambung';
+      setInterval(() => { sec += 1; clock.textContent = String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0'); }, 1000);
+    }, 3000);
+    $$('[data-call-toggle]').forEach((b) => b.addEventListener('click', () => b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'))));
   }
 
   // Admin document search (name / id / document number)

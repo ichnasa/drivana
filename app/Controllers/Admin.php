@@ -93,9 +93,14 @@ class Admin extends BaseController
         if ($q !== '') {
             $rows = array_filter($rows, fn ($d) => str_contains(mb_strtolower($d['user']['name'] . ' ' . $d['user']['email'] . ' ' . Drivana::DOC_LABELS[$d['type']]), $q));
         }
-        usort($rows, fn ($a, $b) => $a['status'] === 'pending' ? strcmp($a['created_at'], $b['created_at']) : strcmp($b['updated_at'], $a['updated_at']));
+        $sort = in_array($this->request->getGet('urut'), ['terlama', 'nama'], true) ? $this->request->getGet('urut') : 'terbaru';
+        usort($rows, match ($sort) {
+            'terlama' => fn ($a, $b) => strcmp($a['created_at'], $b['created_at']),
+            'nama'    => fn ($a, $b) => strcmp(mb_strtolower($a['user']['name']), mb_strtolower($b['user']['name'])),
+            default   => fn ($a, $b) => strcmp($b['created_at'], $a['created_at']),
+        });
 
-        return view('admin/verifikasi', ['title' => 'Verifikasi dokumen', 'docs' => array_values($rows), 'counts' => $counts, 'status' => $status, 'q' => $q] + $this->nav('verifikasi'));
+        return view('admin/verifikasi', ['title' => 'Verifikasi dokumen', 'docs' => array_values($rows), 'counts' => $counts, 'status' => $status, 'q' => $q, 'sort' => $sort] + $this->nav('verifikasi'));
     }
 
     public function setujuiDokumen(int $id)

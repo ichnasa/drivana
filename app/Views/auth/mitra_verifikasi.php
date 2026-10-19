@@ -9,7 +9,7 @@
 
     <!-- 1 -->
     <section class="step-pane" data-step-pane>
-        <h1 class="title">Verifikasi pemilik</h1>
+        <h1 class="title">Verifikasi identitas mitra</h1>
         <p class="lead">KTP, SIM, dan selfie pemilik usaha.</p>
         <div style="margin-top:24px">
             <?= partial('components/upload', ['name' => 'ktp', 'label' => 'Foto KTP', 'sub' => 'Upload foto KTP kamu', 'icon' => 'id-card', 'variant' => 'row']) ?>
@@ -38,7 +38,7 @@
 
     <!-- 3 -->
     <section class="step-pane" data-step-pane>
-        <h1 class="title">Cek sebelum kirim</h1>
+        <h1 class="title">Konfirmasi data mitra</h1>
         <p class="lead">Tim Drivana akan memeriksa data ini.</p>
         <div style="margin-top:24px">
             <?php foreach ([['Foto KTP', 'Siap dikirim', 'id-card'], ['Foto SIM', 'Siap dikirim', 'car'], ['Foto selfie', 'Siap dikirim', 'camera'], ['Data usaha', 'Terisi lengkap', 'store']] as [$t, $s, $ico]): ?>

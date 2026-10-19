@@ -25,6 +25,8 @@ $routes->post('mitra/login/otp/kode', 'Auth::doOtpKode/mitra');
 $routes->post('logout', 'Auth::logout');
 $routes->post('demo/reset', 'Demo::reset');
 $routes->get('kredit', 'Pages::kredit');
+$routes->get('kontak', 'Pages::kontak');
+$routes->get('privasi', 'Pages::privasi');
 
 // Any signed-in user: private documents + payment receipts + the payment gateway
 $routes->group('', ['filter' => 'auth:any'], static function ($routes) {
@@ -48,6 +50,7 @@ $routes->group('', ['filter' => 'auth:customer'], static function ($routes) {
 
     $routes->get('bayar/(:segment)', 'Orders::checkout/$1');
     $routes->post('bayar/(:segment)', 'Orders::pay/$1');
+    $routes->get('pembayaran/berhasil/(:segment)', 'Orders::berhasil/$1');
     $routes->get('pesanan', 'Orders::index');
     $routes->get('pesanan/(:segment)', 'Orders::show/$1');
     $routes->post('pesanan/(:segment)/batal', 'Orders::cancel/$1');
@@ -58,6 +61,7 @@ $routes->group('', ['filter' => 'auth:customer'], static function ($routes) {
     $routes->get('chat/pengemudi/(:segment)', 'Chat::startDriver/$1');
     $routes->get('chat/(:num)', 'Chat::show/$1');
     $routes->post('chat/(:num)/kirim', 'Chat::send/$1');
+    $routes->get('chat/(:num)/telepon', 'Chat::call/$1');
     $routes->get('chat/(:num)/pesan', 'Chat::poll/$1');
 
     $routes->get('profil', 'Account::profil');
@@ -65,6 +69,7 @@ $routes->group('', ['filter' => 'auth:customer'], static function ($routes) {
     $routes->post('profil/edit', 'Account::update');
     $routes->get('profil/dokumen', 'Account::dokumen');
     $routes->post('profil/dokumen/(:segment)', 'Account::uploadDokumen/$1');
+    $routes->get('profil/alamat', 'Account::alamat');
     $routes->get('profil/keamanan', 'Account::keamanan');
     $routes->post('profil/keamanan', 'Account::ubahPassword');
     $routes->get('notifikasi', 'Account::notifikasi');
@@ -92,6 +97,7 @@ $routes->group('mitra', ['filter' => 'auth:mitra'], static function ($routes) {
     $routes->get('pesan/mulai/(:num)', 'Chat::startMitra/$1');
     $routes->get('pesan/(:num)', 'Chat::show/$1');
     $routes->post('pesan/(:num)/kirim', 'Chat::send/$1');
+    $routes->get('pesan/(:num)/telepon', 'Chat::call/$1');
     $routes->get('pesan/(:num)/pesan', 'Chat::poll/$1');
 
     $routes->get('langganan', 'MitraPremium::langganan');
@@ -103,6 +109,7 @@ $routes->group('mitra', ['filter' => 'auth:mitra'], static function ($routes) {
     $routes->post('profil/edit', 'Account::update');
     $routes->get('profil/dokumen', 'Account::dokumen');
     $routes->post('profil/dokumen/(:segment)', 'Account::uploadDokumen/$1');
+    $routes->get('profil/alamat', 'Account::alamat');
     $routes->get('profil/keamanan', 'Account::keamanan');
     $routes->post('profil/keamanan', 'Account::ubahPassword');
     $routes->get('notifikasi', 'Account::notifikasi');

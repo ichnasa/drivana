@@ -28,6 +28,7 @@ class Chat extends BaseController
             'car_name' => $car['name'] ?? null, 'car_image' => $car['image'] ?? null, 'car_plate' => $car['plate'] ?? null,
             'other_name' => $other, 'sub_label' => $sub,
             'other_id' => $isMitra ? (int) $c['customer_id'] : (int) $c['mitra_id'],
+            'other_online' => $this->online($isMitra ? $customer : $mitra),
         ];
     }
 
@@ -45,6 +46,12 @@ class Chat extends BaseController
         }
 
         return $driver ? [Drivana::driverName((int) $c['booking_id']), 'Pengemudi · ' . ($mitra['business_name'] ?: $mitra['name'])] : [$mitra['business_name'] ?: $mitra['name'], 'Mitra rental'];
+    }
+
+    /** "Online" = signed in during the last 30 minutes. */
+    private function online(array $u): bool
+    {
+        return ! empty($u['last_login_at']) && strtotime($u['last_login_at']) > time() - 1800;
     }
 
     private function base(): string
@@ -83,9 +90,14 @@ class Chat extends BaseController
                 'last_body' => $msgs ? end($msgs)['body'] : '', 'unread' => count(array_filter($msgs, fn ($m) => (int) $m['sender_id'] !== $me && $m['read_at'] === null)),
             ];
         }
+        $q = mb_strtolower(trim((string) $this->request->getGet('q')));
+        $all = count($rows);
+        if ($q !== '') {
+            $rows = array_filter($rows, fn ($r) => str_contains(mb_strtolower($r['other_name'] . ' ' . $r['car_name'] . ' ' . $r['last_body']), $q));
+        }
         usort($rows, fn ($a, $b) => strcmp($b['last_message_at'], $a['last_message_at']));
 
-        return view('chat/index', ['title' => 'Chat', 'role' => $this->role(), 'active' => $isMitra ? 'pesan' : 'chat', 'list' => $rows, 'base' => $this->base()]);
+        return view('chat/index', ['title' => 'Chat', 'role' => $this->role(), 'active' => $isMitra ? 'pesan' : 'chat', 'list' => $rows, 'base' => $this->base(), 'q' => $q, 'total' => $all]);
     }
 
     /** Customer opens (or creates) a conversation with the owner of a car. */
@@ -152,6 +164,13 @@ class Chat extends BaseController
         return view('chat/room', ['title' => $c['other_name'], 'role' => $this->role(), 'c' => $c, 'msgs' => $this->messages($id), 'base' => $this->base(), 'nav' => false]);
     }
 
+    public function call(int $id): string
+    {
+        $c = $this->conversation($id);
+
+        return view('chat/telepon', ['title' => 'Panggilan', 'c' => $c, 'base' => $this->base(), 'nav' => false, 'role' => $this->role()]);
+    }
+
     public function send(int $id)
     {
         $c = $this->conversation($id);
@@ -165,7 +184,7 @@ class Chat extends BaseController
         Store::update('conversations', $id, ['last_message_at' => Drivana::now()]);
 
         return $wantsJson
-            ? $this->response->setJSON(['ok' => true, 'message' => $this->format(Store::get('messages', $mid), $c['me'])])
+            ? $this->response->setJSON(['ok' => true, 'message' => $this->format(Store::get('messages', $mid), $c['me'], $id)])
             : redirect()->to($this->base() . '/' . $id);
     }
 

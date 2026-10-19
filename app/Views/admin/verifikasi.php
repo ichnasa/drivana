@@ -2,7 +2,9 @@
 <?= $this->section('content') ?>
 <?php
 use App\Libraries\Drivana;
-$tabs = ['menunggu' => 'Menunggu', 'disetujui' => 'Disetujui', 'ditolak' => 'Ditolak', 'semua' => 'Semua'];
+$tabs = ['semua' => 'Semua', 'menunggu' => 'Menunggu Verifikasi', 'disetujui' => 'Terverifikasi', 'ditolak' => 'Ditolak'];
+$sorts = ['terbaru' => 'Terbaru', 'terlama' => 'Terlama', 'nama' => 'Nama'];
+$to = fn (array $o) => site_url('admin/verifikasi?' . http_build_query(array_filter(array_merge(['status' => $status, 'q' => $q, 'urut' => $sort === 'terbaru' ? '' : $sort], $o), fn ($v) => $v !== '')));
 $tone = ['pending' => ['Menunggu', 'badge-yellow'], 'approved' => ['Disetujui', 'badge-green'], 'rejected' => ['Ditolak', 'badge-red']];
 $docs = array_slice($docs, 0, 50);
 $reasonErr = form_error('reason'); $reasonDoc = form_error('doc');
@@ -14,9 +16,10 @@ $reasonErr = form_error('reason'); $reasonDoc = form_error('doc');
     <?= partial('components/alerts') ?>
     <form class="searchbar" action="<?= site_url('admin/verifikasi') ?>" method="get">
         <?= icon('search', 20) ?><input type="search" name="q" value="<?= esc($q, 'attr') ?>" placeholder="Cari nama, email, atau jenis dokumen" aria-label="Cari">
-        <input type="hidden" name="status" value="<?= esc($status, 'attr') ?>">
+        <input type="hidden" name="status" value="<?= esc($status, 'attr') ?>"><input type="hidden" name="urut" value="<?= $sort === 'terbaru' ? '' : esc($sort, 'attr') ?>">
     </form>
-    <div class="chips" style="margin-top:12px"><?php foreach ($tabs as $k => $l): ?><a class="chip <?= $status === $k ? 'is-active' : '' ?>" href="<?= site_url('admin/verifikasi?status=' . $k . ($q ? '&q=' . urlencode($q) : '')) ?>"><?= $l ?> (<?= $counts[$k] ?>)</a><?php endforeach ?></div>
+    <div class="chips" style="margin-top:12px"><?php foreach ($tabs as $k => $l): ?><a class="chip <?= $status === $k ? 'is-active' : '' ?>" href="<?= $to(['status' => $k]) ?>"><?= $l ?> (<?= $counts[$k] ?>)</a><?php endforeach ?></div>
+    <div class="chips" style="margin-top:8px"><span class="chip" style="pointer-events:none"><?= icon('arrow-up-down', 14) ?> Urutkan</span><?php foreach ($sorts as $k => $l): ?><a class="chip <?= $sort === $k ? 'is-active' : '' ?>" href="<?= $to(['urut' => $k === 'terbaru' ? '' : $k]) ?>"><?= $l ?></a><?php endforeach ?></div>
 
     <?php if (! $docs): ?><div class="empty"><?= icon('file-check-2', 28) ?><p>Tidak ada dokumen di sini.</p></div><?php endif ?>
     <div class="u-list">
@@ -41,7 +44,17 @@ $reasonErr = form_error('reason'); $reasonDoc = form_error('doc');
                 <div style="flex:1"><b style="font-size:18px">Detail dokumen</b><br><small class="muted"><?= esc(Drivana::DOC_LABELS[$d['type']]) ?> · <?= esc($u['name']) ?></small></div>
                 <button class="icon-btn" type="button" data-modal-close aria-label="Tutup"><?= icon('x', 20) ?></button>
             </div>
-            <?php if ($isImg): ?><a href="<?= site_url('berkas/' . $d['id']) ?>" target="_blank" rel="noopener"><img class="doc-full" src="<?= site_url('berkas/' . $d['id']) ?>" alt="<?= esc(Drivana::DOC_LABELS[$d['type']], 'attr') ?>" loading="lazy"></a>
+            <?php if ($isImg): ?>
+                <div data-doc-viewer>
+                    <div class="doc-tools">
+                        <button class="icon-btn" type="button" data-doc-act="in" aria-label="Zoom"><?= icon('zoom-in', 20) ?></button>
+                        <button class="icon-btn" type="button" data-doc-act="out" aria-label="Perkecil"><?= icon('zoom-out', 20) ?></button>
+                        <button class="icon-btn" type="button" data-doc-act="rotate" aria-label="Putar"><?= icon('rotate-cw', 20) ?></button>
+                        <button class="icon-btn" type="button" data-doc-act="full" aria-label="Tampilan penuh"><?= icon('maximize', 20) ?></button>
+                        <a class="icon-btn" href="<?= site_url('berkas/' . $d['id']) ?>" download aria-label="Unduh"><?= icon('download', 20) ?></a>
+                    </div>
+                    <div class="doc-stage"><img class="doc-full" data-doc-img src="<?= site_url('berkas/' . $d['id']) ?>" alt="<?= esc(Drivana::DOC_LABELS[$d['type']], 'attr') ?>" loading="lazy"></div>
+                </div>
             <?php else: ?><a class="btn btn-secondary" href="<?= site_url('berkas/' . $d['id']) ?>" target="_blank" rel="noopener"><?= icon('file-text', 18) ?> Buka berkas PDF</a><?php endif ?>
 
             <div class="info-grid" style="margin-top:16px">
@@ -64,6 +77,7 @@ $reasonErr = form_error('reason'); $reasonDoc = form_error('doc');
                 <p class="muted caption">Diputuskan <?= esc(Drivana::ago($d['reviewed_at'])) ?><?= $d['status'] === 'rejected' ? '. Alasan: ' . esc($d['reject_reason']) : '' ?>.</p>
                 <button class="btn btn-secondary" style="margin-top:12px;height:48px;font-size:14px" type="button" data-modal-close>Tutup</button>
             <?php endif ?>
+            <?php if ($d['status'] === 'pending'): ?><button class="btn btn-secondary" style="margin-top:12px;height:48px;font-size:14px" type="button" data-modal-close>Nanti saja</button><?php endif ?>
         </div>
     </div>
 <?php endforeach ?>

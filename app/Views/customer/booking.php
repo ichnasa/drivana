@@ -71,7 +71,8 @@ $verified = ($me['verification_status'] ?? '') === 'verified';
         </div>
         <div class="field">
             <label for="b-address">Alamat lengkap</label>
-            <div class="input<?= $e('address') ? ' has-error' : '' ?>"><?= icon('house', 18) ?><input id="b-address" name="address" value="<?= esc(old_input('address', $me['address'] ?? ''), 'attr') ?>" placeholder="Jl. Sudirman No. 12" required minlength="5" maxlength="200" aria-describedby="b-address-error"></div>
+            <div class="input<?= $e('address') ? ' has-error' : '' ?>"><?= icon('house', 18) ?><input id="b-address" name="address" list="saved-addresses" value="<?= esc(old_input('address', $me['address'] ?? ''), 'attr') ?>" placeholder="Jl. Sudirman No. 12" required minlength="5" maxlength="200" aria-describedby="b-address-error"></div>
+            <datalist id="saved-addresses"><?php foreach (\App\Libraries\Drivana::DUMMY_ADDRESSES as $sa): ?><option value="<?= esc($sa['address'], 'attr') ?>"><?= esc($sa['label']) ?></option><?php endforeach ?></datalist>
             <p class="field-error" id="b-address-error" role="alert"><?= $msg($e('address')) ?></p>
         </div>
         <div class="field" style="margin:0">

@@ -44,7 +44,8 @@ class Orders extends BaseController
         $rows = array_map(function ($b) {
             $car = Store::get('cars', (int) $b['car_id']);
 
-            return $b + ['car_name' => $car['name'], 'car_image' => $car['image'], 'business_name' => Store::get('users', (int) $b['mitra_id'])['business_name'] ?? ''];
+            return $b + ['car_name' => $car['name'], 'car_image' => $car['image'], 'business_name' => Store::get('users', (int) $b['mitra_id'])['business_name'] ?? '',
+                'reviewed' => Store::count('reviews', fn ($r) => (int) $r['booking_id'] === (int) $b['id']) > 0];
         }, $rows);
 
         return view('customer/pesanan', ['title' => 'Pesanan saya', 'active' => 'pesanan', 'orders' => $rows, 'tab' => $tab]);
@@ -90,6 +91,18 @@ class Orders extends BaseController
         Notifier::to((int) $b['mitra_id'], 'Ulasan baru', 'Penyewa memberi ' . $rating . ' bintang untuk pesanan ' . $b['code'] . '.', 'mitra/reservasi/' . $b['code']);
 
         return redirect()->to($to)->with('success', 'Terima kasih atas ulasanmu!');
+    }
+
+    /** "Pembayaran Berhasil" page shown right after a booking payment succeeds. */
+    public function berhasil(string $ref): string
+    {
+        $p = $this->payment($ref);
+        if ($p['kind'] !== 'booking' || $p['status'] !== 'paid') {
+            $this->notFound();
+        }
+        $b = $this->withCar(Store::get('bookings', (int) $p['booking_id']));
+
+        return view('customer/bayar_berhasil', ['title' => 'Pembayaran berhasil', 'p' => $p, 'b' => $b, 'nav' => false]);
     }
 
     /* ───────── digital receipt ───────── */
@@ -175,7 +188,7 @@ class Orders extends BaseController
         if ($p['kind'] === 'booking') {
             $code = Store::get('bookings', (int) $p['booking_id'])['code'];
 
-            return $ok ? 'pesanan/' . $code : 'bayar/' . $code;
+            return $ok ? 'pembayaran/berhasil/' . $p['ref'] : 'bayar/' . $code;
         }
 
         return $p['kind'] === 'subscription' ? 'mitra/langganan' : 'mitra/boost';
@@ -204,6 +217,9 @@ class Orders extends BaseController
             $ok ? $svc->succeed($ref) : $svc->cancel($ref);
         }
 
-        return redirect()->to($this->afterPay($p, $ok))->with('success', $ok ? 'Pembayaran berhasil.' : 'Pembayaran dibatalkan.');
+        $flash = $ok ? ($p['kind'] === 'booking' ? null : 'Pembayaran berhasil.') : 'Pembayaran dibatalkan.';
+        $to = redirect()->to($this->afterPay($p, $ok));
+
+        return $flash ? $to->with('success', $flash) : $to;
     }
 }

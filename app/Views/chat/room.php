@@ -4,7 +4,8 @@
 
 <header class="topbar">
     <a class="icon-btn" href="<?= site_url($base) ?>" aria-label="Kembali"><?= icon('arrow-left', 22) ?></a>
-    <div class="contact"><?= avatar($c['other_name'], 40) ?><div><b><?= esc($c['other_name']) ?></b><small><?= esc($c['sub_label']) ?></small></div></div>
+    <div class="contact"><?= avatar($c['other_name'], 40) ?><div><b><?= esc($c['other_name']) ?></b><small><span class="dot-status<?= $c['other_online'] ? ' is-on' : '' ?>"></span><?= $c['other_online'] ? 'Online' : 'Offline' ?> · <?= esc($c['sub_label']) ?></small></div></div>
+    <a class="icon-btn" href="<?= site_url($base . '/' . $c['id'] . '/telepon') ?>" aria-label="Telepon"><?= icon('phone', 20) ?></a>
 </header>
 
 <?php if ($c['car_name']): ?>
@@ -16,12 +17,18 @@
 <div class="chat-body" data-chat-body data-poll="<?= site_url($base . '/' . $c['id'] . '/pesan') ?>" data-last-id="<?= $last ?>" style="min-height:calc(100vh - 150px)">
     <?php if (! $msgs): ?><p class="muted caption" style="align-self:center;margin-top:24px">Belum ada pesan. Sapa dulu 👋</p><?php endif ?>
     <?php foreach ($msgs as $m): ?>
-        <div class="bubble <?= (int) $m['sender_id'] === $c['me'] ? 'me' : 'them' ?>" data-id="<?= $m['id'] ?>"><?= esc($m['body']) ?><small><?= date('H.i', strtotime($m['created_at'])) ?></small></div>
+        <div class="bubble <?= (int) $m['sender_id'] === $c['me'] ? 'me' : 'them' ?>" data-id="<?= $m['id'] ?>">
+            <?= esc($m['body']) ?>
+            <small><?= date('H.i', strtotime($m['created_at'])) ?></small>
+        </div>
     <?php endforeach ?>
 </div>
 
 <form class="chat-input" action="<?= site_url($base . '/' . $c['id'] . '/kirim') ?>" method="post" data-chat-form>
     <?= csrf_field() ?>
+    <label class="icon-btn" for="chat-photo" aria-label="Lampirkan foto" style="cursor:pointer"><?= icon('image', 22) ?></label>
+    <input id="chat-photo" type="file" accept="image/png,image/jpeg,image/webp" hidden data-chat-photo>
+    <button class="icon-btn" type="button" aria-label="Kirim lokasi" data-chat-location><?= icon('map-pin', 22) ?></button>
     <div class="input"><input name="body" placeholder="Ketik pesan…" autocomplete="off" maxlength="1000" required aria-label="Pesan"></div>
     <button class="send" type="submit" aria-label="Kirim"><?= icon('send', 20) ?></button>
 </form>

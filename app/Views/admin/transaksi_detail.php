@@ -5,7 +5,7 @@ $pay = ['paid' => ['Dibayar', 'badge-green'], 'pending' => ['Menunggu', 'badge-y
 $method = $payment ? (array_values(array_filter(\App\Libraries\Drivana::PAYMENT_METHODS, fn ($m) => $m['key'] === $payment['method']))[0]['name'] ?? $payment['method']) : null;
 ?>
 
-<?= partial('components/topbar', ['title' => $b['code'], 'back' => site_url('admin/transaksi'), 'sub' => \App\Libraries\Drivana::statusLabel($b['status'])]) ?>
+<?= partial('components/topbar', ['title' => $b['code'], 'back' => site_url('admin/transaksi'), 'sub' => \App\Libraries\Drivana::statusLabel(\App\Libraries\Drivana::displayStatus($b))]) ?>
 
 <div class="page stack" style="padding-top:20px">
     <div class="card" style="display:flex;gap:12px;padding:12px">

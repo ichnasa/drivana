@@ -7,6 +7,16 @@ use App\Libraries\Store;
 /** Public pages. */
 class Pages extends BaseController
 {
+    public function kontak(): string
+    {
+        return view('pages/kontak', ['title' => 'Hubungi kami', 'nav' => false]);
+    }
+
+    public function privasi(): string
+    {
+        return view('pages/privasi', ['title' => 'Kebijakan privasi', 'nav' => false]);
+    }
+
     /** Unsplash photo credits for every seeded car photo. */
     public function kredit(): string
     {

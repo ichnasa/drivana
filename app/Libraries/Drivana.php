@@ -25,6 +25,13 @@ class Drivana
     /** Drivers assigned to bookings that include a driver (picked by booking id). */
     public const DRIVERS = ['Pak Slamet', 'Pak Anwar', 'Pak Hendra', 'Pak Rudi', 'Pak Joko', 'Pak Syahrul'];
 
+    /** Saved-address list shown on the profile (UI only). */
+    public const DUMMY_ADDRESSES = [
+        ['label' => 'Rumah', 'address' => 'Jl. Sudirman No. 12, Jakarta', 'area' => 'Jakarta Selatan'],
+        ['label' => 'Kantor', 'address' => 'Jl. Thamrin No. 45, Jakarta', 'area' => 'Jakarta Pusat'],
+        ['label' => 'Rumah orang tua', 'address' => 'Jl. Margonda Raya No. 8, Depok', 'area' => 'Depok Margonda'],
+    ];
+
     /** Subscription plans (Mitra premium). */
     public const PLANS = [
         'monthly' => ['name' => 'Bulanan', 'price' => 149000, 'days' => 30, 'note' => 'Fleksibel, perpanjang tiap bulan'],
@@ -60,6 +67,7 @@ class Drivana
         'menunggu'        => ['Menunggu konfirmasi', 'badge-yellow'],
         'dikonfirmasi'    => ['Dikonfirmasi', 'badge-blue'],
         'aktif'           => ['Aktif', 'badge-blue'],
+        'perlu_pengembalian' => ['Perlu pengembalian', 'badge-yellow'],
         'selesai'         => ['Selesai', 'badge-green'],
         'dibatalkan'      => ['Dibatalkan', ''],
         'ditolak'         => ['Ditolak mitra', 'badge-red'],
@@ -68,6 +76,12 @@ class Drivana
 
     /** Statuses that keep a car blocked for the booked dates. */
     public const BLOCKING = ['pending_payment', 'menunggu', 'dikonfirmasi', 'aktif'];
+
+    /** Status shown to people: an active rental past its end date is "Perlu pengembalian". */
+    public static function displayStatus(array $b): string
+    {
+        return ($b['status'] === 'aktif' && $b['end_date'] <= date('Y-m-d')) ? 'perlu_pengembalian' : $b['status'];
+    }
 
     public static function statusLabel(string $s): string
     {

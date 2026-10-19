@@ -72,6 +72,13 @@ class Account extends BaseController
         return redirect()->to($this->prefix() . 'profil')->with('success', 'Profil diperbarui.');
     }
 
+    /* ───────── saved addresses (display only, dummy data) ───────── */
+
+    public function alamat(): string
+    {
+        return view('account/alamat', ['title' => 'Alamat tersimpan', 'list' => Drivana::DUMMY_ADDRESSES, 'nav' => false, 'p' => $this->prefix(), 'role' => $this->role()]);
+    }
+
     /* ───────── documents ───────── */
 
     public function dokumen(): string

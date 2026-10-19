@@ -4,11 +4,11 @@
 $mitra = $me['role'] === 'mitra';
 $name = $mitra ? ($me['business_name'] ?: $me['name']) : $me['name'];
 $menu = [
-    [['id-card', 'Edit profil', 'profil/edit'], ['folder', 'Dokumen saya', 'profil/dokumen']],
+    [['id-card', 'Edit profil', 'profil/edit'], ['folder', 'Dokumen saya', 'profil/dokumen'], ['map-pin', 'Alamat tersimpan', 'profil/alamat']],
     $mitra
         ? [['crown', 'Langganan Premium', 'langganan'], ['wallet', 'Riwayat pendapatan', 'pendapatan'], ['shield-check', 'Keamanan', 'profil/keamanan'], ['bell', 'Notifikasi', 'notifikasi']]
         : [['shield-check', 'Keamanan', 'profil/keamanan'], ['bell', 'Notifikasi', 'notifikasi']],
-    [['life-buoy', 'Bantuan dan keluhan', 'bantuan']],
+    [['life-buoy', 'Bantuan dan keluhan', 'bantuan'], ['phone', 'Hubungi kami', '!kontak'], ['shield-check', 'Kebijakan privasi', '!privasi']],
 ];
 ?>
 
@@ -29,7 +29,7 @@ $menu = [
 <?php foreach ($menu as $group): ?>
     <div class="menu-group">
         <?php foreach ($group as [$ico, $label, $url]): ?>
-            <a class="row" href="<?= site_url($p . $url) ?>"><?= icon($ico, 20) ?><span><?= esc($label) ?></span><?= icon('chevron-right', 18) ?></a>
+            <a class="row" href="<?= site_url($url[0] === '!' ? substr($url, 1) : $p . $url) ?>"><?= icon($ico, 20) ?><span><?= esc($label) ?></span><?= icon('chevron-right', 18) ?></a>
         <?php endforeach ?>
     </div>
 <?php endforeach ?>

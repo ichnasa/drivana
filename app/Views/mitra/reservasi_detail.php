@@ -5,7 +5,7 @@ $car = $b['car']; $cu = $b['customer']; $rv = $b['review'];
 $net = $b['total'] - $b['service_fee'];
 ?>
 
-<?= partial('components/topbar', ['title' => $b['code'], 'back' => site_url('mitra/reservasi'), 'sub' => \App\Libraries\Drivana::statusLabel($b['status'])]) ?>
+<?= partial('components/topbar', ['title' => $b['code'], 'back' => site_url('mitra/reservasi'), 'sub' => \App\Libraries\Drivana::statusLabel(\App\Libraries\Drivana::displayStatus($b))]) ?>
 
 <div class="page has-cta stack" style="padding-top:20px">
     <?= partial('components/alerts') ?>

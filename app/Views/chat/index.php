@@ -4,8 +4,13 @@
 <?= partial('components/topbar', ['title' => 'Chat', 'right' => bell_btn()]) ?>
 
 <div class="page" style="padding-top:16px">
-    <?php if (! $list): ?>
-        <div class="empty"><?= icon('message-circle', 28) ?><p><?= $role === 'mitra' ? 'Belum ada percakapan. Pesan dari penyewa muncul di sini.' : 'Belum ada percakapan. Buka detail mobil lalu ketuk ikon chat untuk menghubungi mitra.' ?></p><?php if ($role !== 'mitra'): ?><a class="btn btn-primary btn-sm" href="<?= site_url('cari') ?>">Cari mobil</a><?php endif ?></div>
+    <?php if ($total): ?>
+        <form class="searchbar" action="<?= site_url($base) ?>" method="get" style="margin-bottom:12px"><?= icon('search', 20) ?><input type="search" name="q" value="<?= esc($q, 'attr') ?>" placeholder="Cari percakapan" aria-label="Cari percakapan"></form>
+    <?php endif ?>
+    <?php if (! $list && $q !== ''): ?>
+        <div class="empty"><?= icon('search', 28) ?><p>Tidak ada percakapan yang cocok dengan “<?= esc($q) ?>”.</p></div>
+    <?php elseif (! $list): ?>
+        <div class="empty"><?= icon('message-circle', 28) ?><p>Tidak ada percakapan. <?= $role === 'mitra' ? 'Belum ada percakapan. Pesan dari penyewa muncul di sini.' : 'Belum ada percakapan. Buka detail mobil lalu ketuk ikon chat untuk menghubungi mitra.' ?></p><?php if ($role !== 'mitra'): ?><a class="btn btn-primary btn-sm" href="<?= site_url('cari') ?>">Cari mobil</a><?php endif ?></div>
     <?php endif ?>
     <div class="stack">
         <?php foreach ($list as $c): ?>
