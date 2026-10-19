@@ -9,15 +9,15 @@ $roles = ['' => 'Semua', 'customer' => 'Penyewa', 'mitra' => 'Mitra'];
 
 <div class="page" style="padding-top:12px">
     <?= partial('components/alerts') ?>
-    <form class="searchbar" action="<?= site_url('admin/pengguna') ?>" method="get"><?= icon('search', 20) ?><input type="search" name="q" value="<?= esc($q, 'attr') ?>" placeholder="Cari nama, email, atau rental" aria-label="Cari"><input type="hidden" name="peran" value="<?= esc($role, 'attr') ?>"></form>
-    <div class="chips" style="margin-top:12px"><?php foreach ($roles as $k => $l): ?><a class="chip <?= $role === (string) $k ? 'is-active' : '' ?>" href="<?= site_url('admin/pengguna?peran=' . $k . ($q ? '&q=' . urlencode($q) : '')) ?>"><?= $l ?></a><?php endforeach ?></div>
+    <form class="searchbar" action="<?= site_url('admin/pengguna') ?>" method="get"><?= icon('search', 20) ?><input type="search" name="q" value="<?= esc($q, 'attr') ?>" placeholder="Cari nama, email, atau rental" aria-label="Cari"><input type="hidden" name="peran" value="<?= esc($peran, 'attr') ?>"></form>
+    <div class="chips" style="margin-top:12px"><?php foreach ($roles as $k => $l): ?><a class="chip <?= $peran === (string) $k ? 'is-active' : '' ?>" href="<?= site_url('admin/pengguna?peran=' . $k . ($q ? '&q=' . urlencode($q) : '')) ?>"><?= $l ?></a><?php endforeach ?></div>
 
     <div class="u-list">
-        <?php foreach ($users as $u): $active = $u['status'] === 'active'; ?>
+        <?php foreach ($users as $u): $isOn = $u['status'] === 'active'; ?>
             <article class="u-card">
                 <div class="u-head"><?= avatar($u['business_name'] ?: $u['name'], 42) ?><div><b><?= esc($u['business_name'] ?: $u['name']) ?></b><small><?= esc($u['email']) ?></small></div><span class="badge <?= $ver[$u['verification_status']][1] ?>"><?= $ver[$u['verification_status']][0] ?></span></div>
-                <div class="u-body"><span><?= icon($u['role'] === 'mitra' ? 'store' : 'user', 14) ?> <?= $u['role'] === 'mitra' ? 'Mitra' : 'Penyewa' ?> · bergabung <?= date_id($u['created_at']) ?></span><?php if (! $active): ?><span><?= icon('ban', 14) ?> Akun dinonaktifkan</span><?php endif ?></div>
-                <button class="btn <?= $active ? 'btn-secondary' : 'btn-primary' ?>" style="height:44px;font-size:14px" type="button" data-modal-open="user-modal" data-fill-action="<?= site_url('admin/pengguna/' . $u['id'] . '/status') ?>" data-fill-name="<?= esc($u['business_name'] ?: $u['name'], 'attr') ?>" data-fill-verb="<?= $active ? 'Nonaktifkan' : 'Aktifkan kembali' ?>"><?= icon($active ? 'user-x' : 'user-check', 16) ?> <?= $active ? 'Nonaktifkan akun' : 'Aktifkan kembali' ?></button>
+                <div class="u-body"><span><?= icon($u['role'] === 'mitra' ? 'store' : 'user', 14) ?> <?= $u['role'] === 'mitra' ? 'Mitra' : 'Penyewa' ?> · bergabung <?= date_id($u['created_at']) ?></span><?php if (! $isOn): ?><span><?= icon('ban', 14) ?> Akun dinonaktifkan</span><?php endif ?></div>
+                <button class="btn <?= $isOn ? 'btn-secondary' : 'btn-primary' ?>" style="height:44px;font-size:14px" type="button" data-modal-open="user-modal" data-fill-action="<?= site_url('admin/pengguna/' . $u['id'] . '/status') ?>" data-fill-name="<?= esc($u['business_name'] ?: $u['name'], 'attr') ?>" data-fill-verb="<?= $isOn ? 'Nonaktifkan' : 'Aktifkan kembali' ?>"><?= icon($isOn ? 'user-x' : 'user-check', 16) ?> <?= $isOn ? 'Nonaktifkan akun' : 'Aktifkan kembali' ?></button>
             </article>
         <?php endforeach ?>
     </div>

@@ -3,7 +3,7 @@
 use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
-$routes->get('/', static fn () => redirect()->to('login'));
+$routes->get('/', 'Pages::landing');
 
 // Public: sign in / sign up, demo reset, photo credits
 $routes->get('login', 'Auth::login');
@@ -141,6 +141,8 @@ $routes->group('admin', ['filter' => 'auth:admin'], static function ($routes) {
     $routes->post('pengguna/(:num)/status', 'Admin::statusPengguna/$1');
     $routes->get('keluhan', 'Admin::keluhan');
     $routes->post('keluhan/(:num)/balas', 'Admin::balasKeluhan/$1');
+    $routes->get('aktivitas', 'Admin::log');
     $routes->get('log', 'Admin::log');
+    $routes->get('pengaturan', 'Admin::pengaturan');
     $routes->get('notifikasi', 'Account::notifikasi');
 });

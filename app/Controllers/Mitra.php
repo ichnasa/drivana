@@ -91,7 +91,7 @@ class Mitra extends BaseController
         }, $this->myCars());
         usort($cars, fn ($a, $b) => $b['id'] <=> $a['id']);
 
-        return view('mitra/armada', ['title' => 'Kelola armada', 'role' => 'mitra', 'active' => 'armada', 'cars' => $cars, 'me' => $this->me()]);
+        return view('mitra/armada', ['title' => 'Kelola Armada', 'role' => 'mitra', 'active' => 'armada', 'cars' => $cars, 'me' => $this->me()]);
     }
 
     public function tambah()
@@ -100,12 +100,12 @@ class Mitra extends BaseController
             return redirect()->to('mitra/armada')->with('error', 'Akunmu belum terverifikasi. Selesaikan verifikasi dulu untuk memasang mobil.');
         }
 
-        return view('mitra/armada_form', ['title' => 'Tambah kendaraan', 'role' => 'mitra', 'car' => null, 'me' => $this->me(), 'nav' => false]);
+        return view('mitra/armada_form', ['title' => 'Tambah Data Kendaraan', 'role' => 'mitra', 'car' => null, 'me' => $this->me(), 'nav' => false]);
     }
 
     public function edit(int $id): string
     {
-        return view('mitra/armada_form', ['title' => 'Edit kendaraan', 'role' => 'mitra', 'car' => $this->myCar($id), 'me' => $this->me(), 'nav' => false]);
+        return view('mitra/armada_form', ['title' => 'Edit Data Kendaraan', 'role' => 'mitra', 'car' => $this->myCar($id), 'me' => $this->me(), 'nav' => false]);
     }
 
     public function simpan()

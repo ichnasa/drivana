@@ -64,10 +64,10 @@ class Drivana
     /** Booking status => [label, badge class]. */
     public const BOOKING_STATUS = [
         'pending_payment' => ['Menunggu pembayaran', 'badge-yellow'],
-        'menunggu'        => ['Menunggu konfirmasi', 'badge-yellow'],
+        'menunggu'        => ['Menunggu Konfirmasi', 'badge-yellow'],
         'dikonfirmasi'    => ['Dikonfirmasi', 'badge-blue'],
-        'aktif'           => ['Aktif', 'badge-blue'],
-        'perlu_pengembalian' => ['Perlu pengembalian', 'badge-yellow'],
+        'aktif'           => ['Sedang Digunakan', 'badge-blue'],
+        'perlu_pengembalian' => ['Perlu Pengembalian', 'badge-yellow'],
         'selesai'         => ['Selesai', 'badge-green'],
         'dibatalkan'      => ['Dibatalkan', ''],
         'ditolak'         => ['Ditolak mitra', 'badge-red'],

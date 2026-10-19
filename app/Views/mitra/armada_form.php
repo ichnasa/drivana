@@ -26,21 +26,21 @@ $select = function (string $name, string $label, array $opts, string $icon, stri
     <?php if ($editing && $car['listing_status'] === 'rejected'): ?><div class="banner banner-error"><?= icon('circle-alert', 20) ?><div><b>Ditolak admin</b><p><?= esc($car['reject_reason']) ?> Perbaiki lalu simpan untuk mengajukan ulang.</p></div></div><?php endif ?>
     <?php if (! $editing): ?><div class="banner banner-info"><?= icon('info', 20) ?><div><b>Ditinjau admin dulu</b><p>Mobil baru tampil di pencarian setelah disetujui.</p></div></div><?php endif ?>
 
-    <?= partial('components/field', ['label' => 'Nama kendaraan', 'name' => 'name', 'placeholder' => 'Contoh: Toyota Fortuner', 'value' => $car['name'] ?? '', 'attrs' => ['minlength' => 3, 'maxlength' => 80]]) ?>
+    <?= partial('components/field', ['label' => 'Nama Kendaraan', 'name' => 'name', 'placeholder' => 'Contoh: Toyota Fortuner', 'value' => $car['name'] ?? '', 'attrs' => ['minlength' => 3, 'maxlength' => 80]]) ?>
     <div class="date-grid">
         <?= partial('components/field', ['label' => 'Tahun', 'name' => 'year', 'placeholder' => '2022', 'value' => (string) ($car['year'] ?? ''), 'attrs' => ['inputmode' => 'numeric', 'pattern' => '(19[5-9][0-9]|20[0-9]{2})', 'data-error' => 'Tahun tidak valid. Contoh: 2022.']]) ?>
-        <?= partial('components/field', ['label' => 'Plat nomor', 'name' => 'plate', 'placeholder' => 'B 1234 ABC', 'value' => $car['plate'] ?? '', 'attrs' => ['maxlength' => 12, 'style' => 'text-transform:uppercase', 'pattern' => '[A-Za-z]{1,2}\\s?[0-9]{1,4}\\s?[A-Za-z]{0,3}', 'data-error' => 'Format plat tidak valid. Contoh: B 1234 ABC.']]) ?>
+        <?= partial('components/field', ['label' => 'Plat Nomor', 'name' => 'plate', 'placeholder' => 'B 1234 ABC', 'value' => $car['plate'] ?? '', 'attrs' => ['maxlength' => 12, 'style' => 'text-transform:uppercase', 'pattern' => '[A-Za-z]{1,2}\\s?[0-9]{1,4}\\s?[A-Za-z]{0,3}', 'data-error' => 'Format plat tidak valid. Contoh: B 1234 ABC.']]) ?>
     </div>
-    <?= $select('type', 'Tipe mobil', Drivana::CAR_TYPES, 'car', 'SUV') ?>
+    <?= $select('type', 'Tipe Mobil', Drivana::CAR_TYPES, 'car', 'SUV') ?>
     <div class="date-grid">
-        <?= $select('seats', 'Kursi', Drivana::SEAT_OPTIONS, 'users', '5') ?>
+        <?= $select('seats', 'Kapasitas Penumpang', Drivana::SEAT_OPTIONS, 'users', '5') ?>
         <?= $select('transmission', 'Transmisi', Drivana::TRANSMISSION, 'settings-2', 'Automatic') ?>
     </div>
     <?= $select('fuel', 'BBM', Drivana::FUEL, 'fuel', 'Bensin') ?>
     <?= $select('area', 'Wilayah', Drivana::AREAS, 'map-pin', $me['area'] ?: 'Jakarta Selatan') ?>
 
     <div class="field">
-        <label>Pengemudi</label>
+        <label>Dengan Pengemudi?</label>
         <div class="choice-grid" data-choice-group data-choice-input="#v-driver" style="grid-template-columns:1fr 1fr 1fr">
             <?php foreach (['0' => ['Lepas kunci', 'Tanpa sopir'], '1' => ['Opsional', '+Rp 150rb/hari'], '2' => ['Wajib', 'Termasuk sopir']] as $k => [$t, $s]): ?>
                 <button type="button" class="choice <?= $driverVal === (string) $k ? 'is-active' : '' ?>" data-value="<?= $k ?>"><b style="font-size:14px"><?= $t ?></b><small style="font-size:12px"><?= $s ?></small></button>
@@ -49,11 +49,11 @@ $select = function (string $name, string $label, array $opts, string $icon, stri
         <p class="field-error" role="alert"><?= form_error('driver') ? icon('circle-alert', 16) . ' ' . esc(form_error('driver')) : '' ?></p>
     </div>
 
-    <?= partial('components/field', ['label' => 'Harga sewa per hari', 'name' => 'price', 'placeholder' => '350000', 'value' => (string) ($car['price'] ?? ''), 'hint' => 'Angka saja tanpa titik. Minimal Rp 50.000.', 'attrs' => ['inputmode' => 'numeric', 'pattern' => '[0-9]{5,9}', 'data-error' => 'Isi angka saja tanpa titik. Contoh: 350000.', 'data-min' => 50000, 'data-min-error' => 'Harga sewa minimal Rp 50.000 per hari.']]) ?>
+    <?= partial('components/field', ['label' => 'Harga Sewa', 'name' => 'price', 'placeholder' => '350000', 'value' => (string) ($car['price'] ?? ''), 'hint' => 'Angka saja tanpa titik. Minimal Rp 50.000.', 'attrs' => ['inputmode' => 'numeric', 'pattern' => '[0-9]{5,9}', 'data-error' => 'Isi angka saja tanpa titik. Contoh: 350000.', 'data-min' => 50000, 'data-min-error' => 'Harga sewa minimal Rp 50.000 per hari.']]) ?>
     <?= partial('components/field', ['label' => 'Deskripsi (opsional)', 'name' => 'description', 'icon' => 'text', 'required' => false, 'value' => $car['description'] ?? '', 'attrs' => ['maxlength' => 400]]) ?>
 
     <div class="field">
-        <label>Foto kendaraan</label>
+        <label>Gambar Kendaraan</label>
         <?php if ($editing): ?><div class="photo" style="height:140px;border-radius:12px;margin-bottom:12px"><img src="<?= car_img($car['image']) ?>" alt=""></div><?php endif ?>
         <label class="upload<?= form_error('image') ? ' has-error' : '' ?>" data-upload>
             <?= icon('image-plus', 24) ?><b data-upload-label><?= $editing ? 'Ganti foto (opsional)' : 'Pilih foto' ?></b><small>JPG atau PNG · maks. 5 MB</small>
@@ -62,7 +62,7 @@ $select = function (string $name, string $label, array $opts, string $icon, stri
         <p class="field-error" role="alert"><?= form_error('image') ? icon('circle-alert', 16) . ' ' . esc(form_error('image')) : '' ?></p>
     </div>
 
-    <div class="sticky-cta"><button class="btn btn-primary" type="submit"><span><?= $editing ? 'Simpan perubahan' : 'Tambah kendaraan' ?></span></button></div>
+    <div class="sticky-cta"><button class="btn btn-primary" type="submit"><span><?= $editing ? 'Simpan Perubahan' : 'Tambah Kendaraan' ?></span></button></div>
 </form>
 
 <?= $this->endSection() ?>

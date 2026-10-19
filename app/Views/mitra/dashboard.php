@@ -4,8 +4,8 @@
 $name = $me['business_name'] ?: $me['name'];
 $delta = $revenue_prev > 0 ? (int) round(($revenue - $revenue_prev) / $revenue_prev * 100) : null;
 $premium = [
-    ['circle-dollar-sign', 'Rekomendasi harga', 'Harga sewa sesuai pasar', 'mitra/rekomendasi-harga'],
-    ['chart-line', 'Analitik rental', 'Booking, rating, pendapatan', 'mitra/analitik'],
+    ['circle-dollar-sign', 'Rekomendasi Harga', 'Harga sewa sesuai pasar', 'mitra/rekomendasi-harga'],
+    ['chart-line', 'Analitik Rental', 'Booking, rating, pendapatan', 'mitra/analitik'],
     ['rocket', 'Boost listing', 'Tampil di urutan teratas', 'mitra/boost'],
 ];
 ?>
@@ -17,7 +17,7 @@ $premium = [
         <?= bell_btn() ?>
     </div>
     <div class="glass-card">
-        <div><small>Booking aktif sekarang</small><strong><?= $active_now ?></strong></div>
+        <div><small>Booking Aktif Hari Ini</small><strong><?= $active_now ?></strong></div>
         <span class="glass-ico"><?= icon('calendar', 28) ?></span>
     </div>
 </div>
@@ -30,7 +30,7 @@ $premium = [
     <?php endif ?>
 
     <a class="card kpi" href="<?= site_url('mitra/pendapatan') ?>">
-        <div><small>Pendapatan bulan ini (bersih)</small><strong><?= rupiah($revenue) ?></strong>
+        <div><small>Pendapatan Bulan Ini</small><strong><?= rupiah($revenue) ?></strong>
             <?php if ($delta !== null): ?><span class="badge <?= $delta >= 0 ? 'badge-green' : 'badge-red' ?>"><?= ($delta >= 0 ? '+' : '') . $delta ?>% dari bulan lalu</span><?php endif ?></div>
         <span class="kpi-ico"><?= icon('banknote', 24) ?></span>
     </a>
@@ -46,11 +46,11 @@ $premium = [
         </div>
     <?php endif ?>
 
-    <div class="section-head"><h2>Armada</h2><a href="<?= site_url('mitra/armada') ?>">Kelola</a></div>
-    <div class="stat-row"><?php foreach ($fleet as $k => $n): ?><div><small><?= esc($k) ?></small><b><?= $n ?></b></div><?php endforeach ?></div>
+    <div class="section-head"><h2>Ringkasan Armada</h2><a href="<?= site_url('mitra/armada') ?>">Kelola</a></div>
+    <div class="stat-row"><?php foreach ($fleet as $k => $n): ?><div><small style="text-transform:uppercase"><?= esc($k) ?></small><b><?= $n ?></b></div><?php endforeach ?></div>
     <?php if ($review_cars): ?><p class="muted caption" style="margin-top:12px"><?= $review_cars ?> mobil menunggu tinjauan admin.</p><?php endif ?>
 
-    <div class="section-head"><h2>Premium</h2>
+    <div class="section-head"><h2>Fitur Berlangganan</h2>
         <?php if ($sub): ?><span class="badge badge-green">Aktif sampai <?= date_id($sub['ends_at'], false) ?></span><?php else: ?><a href="<?= site_url('mitra/langganan') ?>">Berlangganan</a><?php endif ?></div>
     <div class="tile-grid">
         <?php foreach ($premium as [$ico, $label, $hint, $url]): ?>

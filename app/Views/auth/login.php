@@ -3,8 +3,8 @@
 
 <div class="logo-box"><img src="<?= base_url('assets/img/logo.png') ?>" alt="Drivana"></div>
 
-<h1 class="title">Masuk</h1>
-<p class="lead">Pakai email atau nomor HP yang terdaftar.</p>
+<h1 class="title">Selamat Datang!</h1>
+<p class="lead">Masuk ke akun kamu</p>
 
 <?= partial('components/alerts') ?>
 
@@ -18,13 +18,13 @@
         'autocomplete' => 'current-password', 'minlength' => 6, 'maxlength' => 72,
     ]]) ?>
 
-    <a class="link-right" href="#">Lupa password?</a>
+    <a class="link-right" href="#">Lupa Password?</a>
     <button class="btn btn-primary" type="submit"><span>Masuk</span></button>
 </form>
 <a class="btn btn-secondary" style="margin-top:12px" href="<?= site_url('login/otp') ?>"><?= icon('key-round', 20) ?> Masuk dengan kode OTP</a>
 
 <div class="divider">atau</div>
-<a class="btn btn-secondary" href="<?= site_url('mitra/login') ?>"><?= icon('store', 20) ?> Masuk sebagai mitra</a>
+<a class="btn btn-secondary" href="<?= site_url('mitra/login') ?>"><?= icon('store', 20) ?> Masuk Sebagai Mitra</a>
 
 <?= partial('components/demo', ['demo' => $demo ?? []]) ?>
 

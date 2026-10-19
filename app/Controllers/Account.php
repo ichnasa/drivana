@@ -29,15 +29,15 @@ class Account extends BaseController
             $cars = array_column(Store::where('cars', fn ($c) => (int) $c['mitra_id'] === $uid), 'id');
             $ratings = array_map(fn ($r) => $r['rating'], Store::where('reviews', fn ($r) => in_array($r['car_id'], $cars, true)));
             $stats = [
-                'Total sewa' => Store::count('bookings', fn ($b) => (int) $b['mitra_id'] === $uid && $b['status'] === 'selesai'),
+                'Total Sewa' => Store::count('bookings', fn ($b) => (int) $b['mitra_id'] === $uid && $b['status'] === 'selesai'),
                 'Aktif' => Store::count('bookings', fn ($b) => (int) $b['mitra_id'] === $uid && in_array($b['status'], ['aktif', 'dikonfirmasi'], true)),
                 'Rating' => $ratings ? number_format(array_sum($ratings) / count($ratings), 1) : '–',
             ];
         } else {
             $stats = [
-                'Total sewa' => Store::count('bookings', fn ($b) => (int) $b['customer_id'] === $uid && $b['status'] === 'selesai'),
+                'Total Sewa' => Store::count('bookings', fn ($b) => (int) $b['customer_id'] === $uid && $b['status'] === 'selesai'),
                 'Aktif' => Store::count('bookings', fn ($b) => (int) $b['customer_id'] === $uid && in_array($b['status'], ['aktif', 'dikonfirmasi'], true)),
-                'Ulasan' => Store::count('reviews', fn ($r) => (int) $r['customer_id'] === $uid),
+                'Rating' => ($given = array_map(fn ($r) => $r['rating'], Store::where('reviews', fn ($r) => (int) $r['customer_id'] === $uid))) ? number_format(array_sum($given) / count($given), 1) : '–',
             ];
         }
 

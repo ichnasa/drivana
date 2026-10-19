@@ -11,8 +11,8 @@
 
     <!-- 1: KTP + SIM -->
     <section class="step-pane" data-step-pane>
-        <h1 class="title">Verifikasi identitas</h1>
-        <p class="lead">Foto KTP dan SIM kamu.</p>
+        <h1 class="title">Verifikasi Identitas</h1>
+        <p class="lead">Upload dokumen kamu</p>
         <div style="margin-top:24px">
             <?= partial('components/upload', ['name' => 'ktp', 'label' => 'Foto KTP', 'sub' => 'JPG atau PNG · maks. 5 MB']) ?>
             <?= partial('components/upload', ['name' => 'sim', 'label' => 'Foto SIM', 'sub' => 'JPG atau PNG · maks. 5 MB']) ?>
@@ -23,8 +23,8 @@
 
     <!-- 2: Selfie -->
     <section class="step-pane" data-step-pane>
-        <h1 class="title">Verifikasi wajah</h1>
-        <p class="lead">Wajah terlihat jelas, tanpa masker.</p>
+        <h1 class="title">Verifikasi Wajah</h1>
+        <p class="lead">Pastikan wajah terlihat jelas</p>
         <div class="field" style="margin-top:24px">
             <label class="selfie<?= $selfieErr ? ' has-error' : '' ?>" data-upload style="cursor:pointer">
                 <span class="oval"><?= icon('camera', 36) ?></span>
@@ -46,8 +46,8 @@
 
     <!-- 3: Confirm -->
     <section class="step-pane" data-step-pane>
-        <h1 class="title">Konfirmasi data</h1>
-        <p class="lead">Admin akan memeriksa dokumen ini.</p>
+        <h1 class="title">Konfirmasi Data</h1>
+        <p class="lead">Periksa kembali informasi kamu</p>
         <div style="margin-top:24px">
             <?php foreach (['Foto KTP' => 'id-card', 'Foto SIM' => 'car', 'Foto selfie' => 'scan-face'] as $doc => $ico): ?>
                 <div class="file-row"><span class="icon-tile"><?= icon($ico, 20) ?></span><div><b><?= $doc ?></b><small>Siap dikirim</small></div><?= icon('circle-check', 22, 'check-ok') ?></div>
@@ -59,7 +59,7 @@
         </div>
         <div class="actions" style="margin-top:8px">
             <button class="btn btn-secondary" type="button" data-prev>Kembali</button>
-            <button class="btn btn-primary" type="submit"><span>Kirim verifikasi</span></button>
+            <button class="btn btn-primary" type="submit"><span>Kirim Verifikasi</span></button>
         </div>
     </section>
 </form>

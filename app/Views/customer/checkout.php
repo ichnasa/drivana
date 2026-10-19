@@ -28,13 +28,13 @@ $sel = old_input('method', 'bank');
     </div>
 
     <div class="panel">
-        <h4>Metode pembayaran</h4>
+        <h4>Metode Pembayaran</h4>
         <?= partial('components/pay_methods', ['methods' => $methods, 'selected' => $sel, 'inputId' => 'p-method']) ?>
         <p class="field-error" role="alert"><?= $methodErr ? icon('circle-alert', 16) . ' ' . esc($methodErr) : '' ?></p>
     </div>
 
     <div class="panel">
-        <h4>Kode promo</h4>
+        <h4>Kode Promo</h4>
         <div style="display:flex;gap:12px;align-items:flex-start">
             <div class="field" style="flex:1;min-width:0;margin:0">
                 <div class="input<?= $promoErr ? ' has-error' : '' ?>"><?= icon('ticket', 20) ?><input name="promo" data-promo-input value="<?= esc(old_input('promo', $b['promo_code'] ?? ''), 'attr') ?>" placeholder="Masukkan kode promo" autocomplete="off" maxlength="20" aria-label="Kode promo" style="text-transform:uppercase"></div>
@@ -46,7 +46,7 @@ $sel = old_input('method', 'bank');
         <?php if ($offer): ?><p class="field-hint">Coba <b><?= esc($offer['code']) ?></b> untuk diskon <?= $offer['percent'] ?>%.</p><?php endif ?>
     </div>
 
-    <div class="sticky-cta"><button class="btn btn-primary btn-cta" type="submit"><span>Konfirmasi pembayaran</span><small data-cta-total><?= rupiah($b['total']) ?></small></button></div>
+    <div class="sticky-cta"><button class="btn btn-primary btn-cta" type="submit"><span>Bayar Sekarang</span><small data-cta-total><?= rupiah($b['total']) ?></small></button></div>
 </form>
 
 <?= $this->endSection() ?>

@@ -10,7 +10,7 @@ $docs = array_slice($docs, 0, 50);
 $reasonErr = form_error('reason'); $reasonDoc = form_error('doc');
 ?>
 
-<?= partial('components/topbar', ['title' => 'Verifikasi dokumen', 'sub' => $counts['menunggu'] . ' dokumen menunggu', 'right' => bell_btn('admin')]) ?>
+<?= partial('components/topbar', ['title' => 'Verifikasi Dokumen', 'sub' => $counts['menunggu'] . ' dokumen menunggu', 'right' => bell_btn('admin')]) ?>
 
 <div class="page" style="padding-top:16px">
     <?= partial('components/alerts') ?>
@@ -27,7 +27,7 @@ $reasonErr = form_error('reason'); $reasonDoc = form_error('doc');
             <article class="u-card">
                 <div class="u-head"><?= avatar($u['name'], 42) ?><div><b><?= esc($u['name']) ?></b><small><?= $u['role'] === 'mitra' ? 'Mitra' : 'Penyewa' ?> · <?= esc(Drivana::DOC_LABELS[$d['type']]) ?></small></div><span class="badge <?= $tone[$d['status']][1] ?>"><?= $tone[$d['status']][0] ?></span></div>
                 <div class="u-body"><span><?= icon('clock', 14) ?> Diunggah <?= esc(Drivana::ago($d['created_at'])) ?></span><?php if ($d['status'] === 'rejected'): ?><span><?= icon('circle-alert', 14) ?> <?= esc($d['reject_reason']) ?></span><?php endif ?></div>
-                <button class="btn <?= $d['status'] === 'pending' ? 'btn-primary' : 'btn-secondary' ?>" style="height:44px;font-size:14px" type="button" data-modal-open="doc-<?= $d['id'] ?>"><?= icon('eye', 16) ?> <?= $d['status'] === 'pending' ? 'Periksa' : 'Lihat detail' ?></button>
+                <button class="btn <?= $d['status'] === 'pending' ? 'btn-primary' : 'btn-secondary' ?>" style="height:44px;font-size:14px" type="button" data-modal-open="doc-<?= $d['id'] ?>"><?= icon('eye', 16) ?> <?= $d['status'] === 'pending' ? 'Lihat Detail' : 'Lihat Detail' ?></button>
             </article>
         <?php endforeach ?>
     </div>

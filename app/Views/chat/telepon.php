@@ -15,10 +15,10 @@
     </div>
 
     <div class="call-grid">
-        <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('mic-off', 24) ?><span>Bisukan</span></button>
+        <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('mic-off', 24) ?><span>Mute</span></button>
         <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('grid-3x3', 24) ?><span>Keypad</span></button>
         <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('volume-2', 24) ?><span>Speaker</span></button>
-        <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('plus', 24) ?><span>Tambah</span></button>
+        <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('plus', 24) ?><span>Add Call</span></button>
         <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('video', 24) ?><span>Video</span></button>
         <button type="button" class="call-btn" data-call-toggle aria-pressed="false"><?= icon('radio', 24) ?><span>Bluetooth</span></button>
     </div>

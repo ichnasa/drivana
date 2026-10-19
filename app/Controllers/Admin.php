@@ -100,7 +100,7 @@ class Admin extends BaseController
             default   => fn ($a, $b) => strcmp($b['created_at'], $a['created_at']),
         });
 
-        return view('admin/verifikasi', ['title' => 'Verifikasi dokumen', 'docs' => array_values($rows), 'counts' => $counts, 'status' => $status, 'q' => $q, 'sort' => $sort] + $this->nav('verifikasi'));
+        return view('admin/verifikasi', ['title' => 'Verifikasi Dokumen', 'docs' => array_values($rows), 'counts' => $counts, 'status' => $status, 'q' => $q, 'sort' => $sort] + $this->nav('verifikasi'));
     }
 
     public function setujuiDokumen(int $id)
@@ -136,7 +136,7 @@ class Admin extends BaseController
         usort($rows, fn ($a, $b) => strcmp($b['created_at'], $a['created_at']));
         $rows = array_map(fn ($c) => $c + ['mitra' => $this->user((int) $c['mitra_id'])], $rows);
 
-        return view('admin/mobil', ['title' => 'Tinjau mobil', 'cars' => array_values($rows), 'counts' => $counts, 'status' => $status] + $this->nav('mobil'));
+        return view('admin/mobil', ['title' => 'Tinjau mobil', 'cars' => array_values($rows), 'counts' => $counts, 'status' => $status] + $this->nav('verifikasi'));
     }
 
     public function setujuiMobil(int $id)
@@ -190,7 +190,7 @@ class Admin extends BaseController
         $rows = array_values($rows);
         usort($rows, fn ($a, $b) => strcmp($b['created_at'], $a['created_at']));
 
-        return view('admin/transaksi', ['title' => 'Transaksi', 'tab' => $tab, 'status' => $status, 'q' => $q, 'from' => $from, 'to' => $to, 'rows' => array_slice($rows, 0, 60), 'total' => count($rows)] + $this->nav('transaksi'));
+        return view('admin/transaksi', ['title' => 'Transaksi', 'tab' => $tab, 'status' => $status, 'q' => $q, 'from' => $from, 'to' => $to, 'rows' => array_slice($rows, 0, 60), 'total' => count($rows)] + $this->nav('aktivitas'));
     }
 
     private function lastPayment(int $bookingId): ?array
@@ -209,7 +209,7 @@ class Admin extends BaseController
             'title' => 'Transaksi ' . $b['code'], 'b' => $b, 'car' => Store::get('cars', (int) $b['car_id']),
             'customer' => $this->user((int) $b['customer_id']), 'mitra' => $this->user((int) $b['mitra_id']), 'payment' => $this->lastPayment((int) $b['id']),
             'review' => Store::first('reviews', fn ($r) => (int) $r['booking_id'] === (int) $b['id']),
-        ] + $this->nav('transaksi'));
+        ] + $this->nav('aktivitas'));
     }
 
     /* ───────── users ───────── */
@@ -222,7 +222,7 @@ class Admin extends BaseController
             && ($q === '' || str_contains(mb_strtolower($u['name'] . ' ' . $u['email'] . ' ' . $u['business_name']), $q)));
         usort($rows, fn ($a, $b) => strcmp($b['created_at'], $a['created_at']));
 
-        return view('admin/pengguna', ['title' => 'Pengguna', 'users' => $rows, 'role' => $role, 'q' => $q] + $this->nav('pengguna'));
+        return view('admin/pengguna', ['title' => 'Pengguna', 'users' => $rows, 'peran' => $role, 'q' => $q] + $this->nav('pengguna'));
     }
 
     public function statusPengguna(int $id)
@@ -246,7 +246,7 @@ class Admin extends BaseController
         usort($rows, fn ($a, $b) => [$a['status'] === 'open' ? 0 : 1, $b['created_at']] <=> [$b['status'] === 'open' ? 0 : 1, $a['created_at']]);
         $rows = array_map(fn ($c) => $c + ['user' => $this->user((int) $c['user_id']), 'code' => $c['booking_id'] ? (Store::get('bookings', (int) $c['booking_id'])['code'] ?? null) : null], $rows);
 
-        return view('admin/keluhan', ['title' => 'Keluhan', 'rows' => $rows] + $this->nav('dashboard'));
+        return view('admin/keluhan', ['title' => 'Keluhan', 'rows' => $rows] + $this->nav('aktivitas'));
     }
 
     public function balasKeluhan(int $id)
@@ -267,6 +267,15 @@ class Admin extends BaseController
         $rows = Store::all('activity_logs');
         usort($rows, fn ($a, $b) => strcmp($b['created_at'], $a['created_at']));
 
-        return view('admin/log', ['title' => 'Aktivitas', 'rows' => array_slice($rows, 0, 100)] + $this->nav('dashboard'));
+        return view('admin/log', ['title' => 'Aktivitas', 'rows' => array_slice($rows, 0, 100)] + $this->nav('aktivitas'));
+    }
+
+    public function pengaturan(): string
+    {
+        return view('admin/pengaturan', [
+            'title' => 'Pengaturan', 'me' => $this->me(),
+            'cars_pending' => Store::count('cars', fn ($c) => $c['listing_status'] === 'pending' && ! $c['deleted_at']),
+            'complaints_open' => Store::count('complaints', fn ($c) => $c['status'] === 'open'),
+        ] + $this->nav('pengaturan'));
     }
 }

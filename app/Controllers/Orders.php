@@ -48,7 +48,7 @@ class Orders extends BaseController
                 'reviewed' => Store::count('reviews', fn ($r) => (int) $r['booking_id'] === (int) $b['id']) > 0];
         }, $rows);
 
-        return view('customer/pesanan', ['title' => 'Pesanan saya', 'active' => 'pesanan', 'orders' => $rows, 'tab' => $tab]);
+        return view('customer/pesanan', ['title' => 'Pesanan Saya', 'active' => 'pesanan', 'orders' => $rows, 'tab' => $tab]);
     }
 
     public function show(string $code): string

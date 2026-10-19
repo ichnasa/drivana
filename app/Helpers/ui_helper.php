@@ -83,9 +83,9 @@ if (! function_exists('nav_items')) {
             'admin' => [
                 'dashboard'  => ['Dashboard', 'layout-dashboard', 'admin/dashboard'],
                 'verifikasi' => ['Verifikasi', 'shield-check', 'admin/verifikasi'],
-                'mobil'      => ['Mobil', 'car', 'admin/mobil'],
-                'transaksi'  => ['Transaksi', 'receipt', 'admin/transaksi'],
                 'pengguna'   => ['Pengguna', 'users', 'admin/pengguna'],
+                'aktivitas'  => ['Aktivitas', 'history', 'admin/aktivitas'],
+                'pengaturan' => ['Pengaturan', 'settings', 'admin/pengaturan'],
             ],
             default => [
                 'beranda'  => ['Beranda', 'house', 'beranda'],

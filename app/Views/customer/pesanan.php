@@ -2,7 +2,7 @@
 <?= $this->section('content') ?>
 <?php $tabs = ['semua' => 'Semua', 'aktif' => 'Aktif', 'menunggu' => 'Menunggu Konfirmasi', 'selesai' => 'Riwayat']; ?>
 
-<?= partial('components/topbar', ['title' => 'Pesanan saya', 'right' => bell_btn()]) ?>
+<?= partial('components/topbar', ['title' => 'Pesanan Saya', 'right' => bell_btn()]) ?>
 
 <div class="page" style="padding-top:12px">
     <div class="chips">
@@ -32,12 +32,12 @@
                     <?php if ($o['status'] === 'pending_payment'): ?>
                         <a class="btn btn-primary btn-sm" style="flex:1" href="<?= site_url('bayar/' . $o['code']) ?>">Bayar sekarang</a>
                     <?php elseif ($o['status'] === 'selesai'): ?>
-                        <a class="btn btn-primary btn-sm" style="flex:1" href="<?= site_url('mobil/' . $o['car_id']) ?>">Pesan lagi</a>
-                        <?php if (! $o['reviewed']): ?><a class="btn btn-secondary btn-sm" style="flex:1" href="<?= $detail ?>#ulasan"><?= icon('star', 16) ?> Beri ulasan</a><?php endif ?>
+                        <a class="btn btn-primary btn-sm" style="flex:1" href="<?= site_url('mobil/' . $o['car_id']) ?>">Pesan Lagi</a>
+                        <?php if (! $o['reviewed']): ?><a class="btn btn-secondary btn-sm" style="flex:1" href="<?= $detail ?>#ulasan"><?= icon('star', 16) ?> Beri Ulasan</a><?php endif ?>
                     <?php elseif (in_array($o['status'], ['menunggu', 'dikonfirmasi', 'aktif'], true)): ?>
-                        <a class="btn btn-secondary btn-sm" style="flex:1" href="<?= $chat ?>"><?= icon('message-square', 16) ?> Chat mitra</a>
+                        <a class="btn btn-secondary btn-sm" style="flex:1" href="<?= $chat ?>"><?= icon('message-square', 16) ?> Chat Mitra</a>
                     <?php endif ?>
-                    <a class="btn btn-secondary btn-sm" style="flex:1" href="<?= $detail ?>">Lihat detail</a>
+                    <a class="btn btn-secondary btn-sm" style="flex:1" href="<?= $detail ?>">Lihat Detail</a>
                     <?php if ($o['status'] === 'menunggu'): ?>
                         <button class="btn btn-secondary btn-sm" style="flex:1" type="button" data-modal-open="cancel-modal" data-fill-action="<?= site_url('pesanan/' . $o['code'] . '/batal') ?>" data-fill-name="<?= esc($o['car_name'], 'attr') ?>">Batalkan</button>
                     <?php endif ?>
@@ -54,10 +54,10 @@
     <form class="modal-box" method="post" data-form-target novalidate style="text-align:left">
         <?= csrf_field() ?>
         <span class="ico"><?= icon('triangle-alert', 24) ?></span>
-        <h3 id="cancel-title">Batalkan pesanan ini?</h3>
+        <h3 id="cancel-title">Batalkan Pesanan?</h3>
         <p class="muted" style="margin:-8px 0 16px">Pesanan <b data-slot="name"></b> dibatalkan dan dana dikembalikan penuh.</p>
         <div class="field"><label for="cancel-reason">Alasan (opsional)</label><div class="input"><input id="cancel-reason" name="reason" maxlength="200" placeholder="Rencana berubah"></div></div>
-        <div class="modal-actions"><button class="btn btn-secondary" type="button" data-modal-close>Tidak jadi</button><button class="btn btn-danger" type="submit" style="background:var(--error);color:#fff"><span>Batalkan</span></button></div>
+        <div class="modal-actions"><button class="btn btn-secondary" type="button" data-modal-close>Jangan Batalkan</button><button class="btn btn-danger" type="submit" style="background:var(--error);color:#fff"><span>Batalkan</span></button></div>
     </form>
 </div>
 <?= $this->endSection() ?>
