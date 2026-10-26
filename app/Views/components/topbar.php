@@ -7,7 +7,7 @@
     <?php endif ?>
     <div class="topbar-title">
         <h1><?= esc($title) ?></h1>
-        <?php if (! empty($sub)): ?><p><?= esc($sub) ?></p><?php endif ?>
+        <?php if (! empty($sub) && is_string($sub)): ?><p><?= esc($sub) ?></p><?php endif ?>
     </div>
     <?= $right ?? '' ?>
 </header>

@@ -9,7 +9,6 @@
     <div class="card" style="display:flex;gap:12px;padding:16px"><?= icon('mail', 20) ?><div><b>Email</b><p class="muted">bantuan@drivana.test</p></div></div>
     <div class="card" style="display:flex;gap:12px;padding:16px"><?= icon('message-circle', 20) ?><div><b>WhatsApp</b><p class="muted">0812-0000-0000</p></div></div>
     <div class="card" style="display:flex;gap:12px;padding:16px"><?= icon('clock', 20) ?><div><b>Jam layanan</b><p class="muted">Senin–Minggu, 08.00–21.00 WIB</p></div></div>
-    <p class="muted caption">Untuk keluhan terkait pesanan, kirim lewat menu Bantuan agar admin bisa membalas langsung ke akunmu.</p>
 </div>
 
 <?= $this->endSection() ?>

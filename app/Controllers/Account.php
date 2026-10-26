@@ -8,7 +8,7 @@ use App\Libraries\Notifier;
 use App\Libraries\Store;
 use App\Libraries\VerificationService;
 
-/** Profile, documents, password, notifications and help — shared by Customer and Mitra (notifications also by Admin). */
+/** Profile, documents, password, and notifications — shared by Customer and Mitra (notifications also by Admin). */
 class Account extends BaseController
 {
     private function nav(): array
@@ -157,44 +157,5 @@ class Account extends BaseController
         }
 
         return $html;
-    }
-
-    /* ───────── help + complaints ───────── */
-
-    public function bantuan(): string
-    {
-        $uid = (int) session('user')['id'];
-        $mine = Store::where('complaints', fn ($c) => (int) $c['user_id'] === $uid);
-        usort($mine, fn ($a, $b) => $b['id'] <=> $a['id']);
-        $col = $this->role() === 'mitra' ? 'mitra_id' : 'customer_id';
-        $orders = Store::where('bookings', fn ($b) => (int) $b[$col] === $uid);
-        usort($orders, fn ($a, $b) => $b['id'] <=> $a['id']);
-
-        return view('account/bantuan', ['title' => 'Bantuan', 'mine' => $mine, 'orders' => array_slice($orders, 0, 20), 'nav' => false, 'p' => $this->prefix(), 'role' => $this->role()]);
-    }
-
-    public function keluhan()
-    {
-        $to = $this->prefix() . 'bantuan';
-        if (! $this->validate(FormRules::complaint())) {
-            return $this->backWith($to, $this->validator->getErrors());
-        }
-        $uid = (int) session('user')['id'];
-        $code = trim((string) $this->request->getPost('booking'));
-        $booking = null;
-        if ($code !== '') {
-            $col = $this->role() === 'mitra' ? 'mitra_id' : 'customer_id';
-            $booking = Store::first('bookings', fn ($b) => $b['code'] === $code && (int) $b[$col] === $uid);
-            if (! $booking) {
-                return $this->backWith($to, ['booking' => 'Kode booking tidak ditemukan di akunmu.']);
-            }
-        }
-        $subject = trim((string) $this->request->getPost('subject'));
-        Store::insert('complaints', ['user_id' => $uid, 'booking_id' => $booking['id'] ?? null, 'subject' => $subject, 'message' => trim((string) $this->request->getPost('message')),
-            'status' => 'open', 'admin_reply' => null, 'replied_at' => null, 'created_at' => Drivana::now()]);
-        Notifier::admins('Keluhan baru', $this->me()['name'] . ': ' . $subject, 'admin/keluhan');
-        Notifier::log($uid, 'info', 'Keluhan baru dari ' . $this->me()['name'], $subject);
-
-        return redirect()->to($to)->with('success', 'Keluhan terkirim. Admin akan membalas lewat notifikasi.');
     }
 }

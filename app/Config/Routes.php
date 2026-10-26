@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /** @var RouteCollection $routes */
 $routes->get('/', 'Pages::landing');
 
-// Public: sign in / sign up, demo reset, photo credits
+// Public: sign in / sign up, demo reset
 $routes->get('login', 'Auth::login');
 $routes->post('login', 'Auth::doLogin');
 $routes->get('register', 'Auth::register');
@@ -24,7 +24,6 @@ $routes->get('mitra/login/otp/kode', 'Auth::otpKode/mitra');
 $routes->post('mitra/login/otp/kode', 'Auth::doOtpKode/mitra');
 $routes->post('logout', 'Auth::logout');
 $routes->post('demo/reset', 'Demo::reset');
-$routes->get('kredit', 'Pages::kredit');
 $routes->get('kontak', 'Pages::kontak');
 $routes->get('privasi', 'Pages::privasi');
 
@@ -58,7 +57,6 @@ $routes->group('', ['filter' => 'auth:customer'], static function ($routes) {
 
     $routes->get('chat', 'Chat::index');
     $routes->get('chat/mulai/(:num)', 'Chat::start/$1');
-    $routes->get('chat/pengemudi/(:segment)', 'Chat::startDriver/$1');
     $routes->get('chat/(:num)', 'Chat::show/$1');
     $routes->post('chat/(:num)/kirim', 'Chat::send/$1');
     $routes->get('chat/(:num)/telepon', 'Chat::call/$1');
@@ -73,8 +71,6 @@ $routes->group('', ['filter' => 'auth:customer'], static function ($routes) {
     $routes->get('profil/keamanan', 'Account::keamanan');
     $routes->post('profil/keamanan', 'Account::ubahPassword');
     $routes->get('notifikasi', 'Account::notifikasi');
-    $routes->get('bantuan', 'Account::bantuan');
-    $routes->post('bantuan/keluhan', 'Account::keluhan');
 });
 
 // ───────── Mitra ─────────
@@ -113,8 +109,6 @@ $routes->group('mitra', ['filter' => 'auth:mitra'], static function ($routes) {
     $routes->get('profil/keamanan', 'Account::keamanan');
     $routes->post('profil/keamanan', 'Account::ubahPassword');
     $routes->get('notifikasi', 'Account::notifikasi');
-    $routes->get('bantuan', 'Account::bantuan');
-    $routes->post('bantuan/keluhan', 'Account::keluhan');
 });
 
 // Mitra premium features (need an active subscription)
@@ -139,8 +133,6 @@ $routes->group('admin', ['filter' => 'auth:admin'], static function ($routes) {
     $routes->get('transaksi/(:segment)', 'Admin::transaksiDetail/$1');
     $routes->get('pengguna', 'Admin::pengguna');
     $routes->post('pengguna/(:num)/status', 'Admin::statusPengguna/$1');
-    $routes->get('keluhan', 'Admin::keluhan');
-    $routes->post('keluhan/(:num)/balas', 'Admin::balasKeluhan/$1');
     $routes->get('aktivitas', 'Admin::log');
     $routes->get('log', 'Admin::log');
     $routes->get('pengaturan', 'Admin::pengaturan');

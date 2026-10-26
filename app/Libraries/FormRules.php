@@ -253,19 +253,6 @@ class FormRules
         ];
     }
 
-    public static function complaint(): array
-    {
-        return [
-            'subject' => ['label' => 'Subjek', 'rules' => 'required|min_length[5]|max_length[120]', 'errors' => ['required' => 'Subjek wajib diisi.', 'min_length' => 'Subjek minimal 5 karakter.', 'max_length' => 'Subjek maksimal 120 karakter.']],
-            'message' => ['label' => 'Pesan', 'rules' => 'required|min_length[10]|max_length[1000]', 'errors' => ['required' => 'Ceritakan masalahmu.', 'min_length' => 'Pesan minimal 10 karakter.', 'max_length' => 'Pesan maksimal 1000 karakter.']],
-            'booking' => ['label' => 'Kode booking', 'rules' => 'permit_empty|max_length[24]', 'errors' => ['max_length' => 'Kode booking tidak valid.']],
-        ];
-    }
-
-    public static function reply(): array
-    {
-        return ['reply' => ['label' => 'Balasan', 'rules' => 'required|min_length[5]|max_length[1000]', 'errors' => ['required' => 'Balasan wajib diisi.', 'min_length' => 'Balasan minimal 5 karakter.']]];
-    }
 
     public static function subscription(): array
     {

@@ -8,7 +8,7 @@ $menu = [
     $mitra
         ? [['crown', 'Langganan Premium', 'langganan'], ['wallet', 'Riwayat pendapatan', 'pendapatan'], ['shield-check', 'Keamanan', 'profil/keamanan'], ['bell', 'Notifikasi', 'notifikasi']]
         : [['shield-check', 'Keamanan', 'profil/keamanan'], ['bell', 'Notifikasi', 'notifikasi']],
-    [['life-buoy', 'Bantuan dan Keluhan', 'bantuan'], ['phone', 'Hubungi Kami', '!kontak'], ['shield-check', 'Kebijakan Privasi', '!privasi']],
+    [['phone', 'Hubungi Kami', '!kontak'], ['shield-check', 'Kebijakan Privasi', '!privasi']],
 ];
 ?>
 

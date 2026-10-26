@@ -29,10 +29,6 @@ $ratingErr = form_error('rating'); $commentErr = form_error('comment');
         <div class="sum-row"><span>Pengemudi</span><b><?= $b['with_driver'] ? 'Termasuk' : 'Lepas kunci' ?></b></div>
         <div class="sum-row"><span>Diantar ke</span><b style="text-align:right;max-width:60%"><?= esc($b['address']) ?></b></div>
         <?php if ($b['note']): ?><div class="sum-row"><span>Catatan</span><b style="text-align:right;max-width:60%"><?= esc($b['note']) ?></b></div><?php endif ?>
-        <?php if ($b['with_driver'] && in_array($b['status'], ['dikonfirmasi', 'aktif'], true)): ?>
-            <div class="sum-row"><span>Nama pengemudi</span><b><?= esc(\App\Libraries\Drivana::driverName((int) $b['id'])) ?></b></div>
-            <a class="btn btn-secondary btn-sm" style="margin-top:12px" href="<?= site_url('chat/pengemudi/' . $b['code']) ?>"><?= icon('message-circle', 18) ?> Chat pengemudi</a>
-        <?php endif ?>
     </div>
 
     <div class="panel">

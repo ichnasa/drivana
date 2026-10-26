@@ -8,7 +8,7 @@ use App\Libraries\Notifier;
 use App\Libraries\Store;
 use App\Libraries\VerificationService;
 
-/** Admin: dashboard, document verification, car review, transactions, users, complaints, activity log. */
+/** Admin: dashboard, document verification, car review, transactions, users, activity log. */
 class Admin extends BaseController
 {
     private function aid(): int
@@ -72,7 +72,6 @@ class Admin extends BaseController
             'users' => ['total' => count($people), 'pending' => $by('pending'), 'verified' => $by('verified'), 'rejected' => $by('rejected'), 'unverified' => $by('unverified')],
             'trend' => $trend, 'peak' => $peak, 'attention' => $attention, 'logs' => array_slice($logs, 0, 5),
             'cars_pending' => Store::count('cars', fn ($c) => $c['listing_status'] === 'pending' && ! $c['deleted_at']),
-            'complaints_open' => Store::count('complaints', fn ($c) => $c['status'] === 'open'),
         ] + $this->nav('dashboard'));
     }
 
@@ -238,29 +237,7 @@ class Admin extends BaseController
         return redirect()->back()->with('success', $u['name'] . ($new === 'inactive' ? ' dinonaktifkan.' : ' diaktifkan kembali.'));
     }
 
-    /* ───────── complaints + activity ───────── */
-
-    public function keluhan(): string
-    {
-        $rows = Store::all('complaints');
-        usort($rows, fn ($a, $b) => [$a['status'] === 'open' ? 0 : 1, $b['created_at']] <=> [$b['status'] === 'open' ? 0 : 1, $a['created_at']]);
-        $rows = array_map(fn ($c) => $c + ['user' => $this->user((int) $c['user_id']), 'code' => $c['booking_id'] ? (Store::get('bookings', (int) $c['booking_id'])['code'] ?? null) : null], $rows);
-
-        return view('admin/keluhan', ['title' => 'Keluhan', 'rows' => $rows] + $this->nav('aktivitas'));
-    }
-
-    public function balasKeluhan(int $id)
-    {
-        $c = Store::get('complaints', $id) ?? $this->notFound();
-        if (! $this->validate(FormRules::reply())) {
-            return $this->backWith('admin/keluhan', ['reply' => $this->validator->getError('reply'), 'complaint' => (string) $id]);
-        }
-        Store::update('complaints', $id, ['admin_reply' => trim((string) $this->request->getPost('reply')), 'status' => 'resolved', 'replied_at' => Drivana::now()]);
-        Notifier::to((int) $c['user_id'], 'Keluhanmu dibalas', 'Admin membalas: ' . $c['subject'], (($this->user((int) $c['user_id'])['role'] === 'mitra') ? 'mitra/' : '') . 'bantuan');
-        Notifier::log($this->aid(), 'success', 'Keluhan dibalas: ' . $c['subject'], $this->user((int) $c['user_id'])['name']);
-
-        return redirect()->to('admin/keluhan')->with('success', 'Balasan terkirim.');
-    }
+    /* ───────── activity ───────── */
 
     public function log(): string
     {
@@ -275,7 +252,6 @@ class Admin extends BaseController
         return view('admin/pengaturan', [
             'title' => 'Pengaturan', 'me' => $this->me(),
             'cars_pending' => Store::count('cars', fn ($c) => $c['listing_status'] === 'pending' && ! $c['deleted_at']),
-            'complaints_open' => Store::count('complaints', fn ($c) => $c['status'] === 'open'),
         ] + $this->nav('pengaturan'));
     }
 }

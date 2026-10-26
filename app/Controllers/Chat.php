@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Libraries\BookingService;
 use App\Libraries\Drivana;
 use App\Libraries\FormRules;
 use App\Libraries\Store;
@@ -32,20 +31,14 @@ class Chat extends BaseController
         ];
     }
 
-    private function isDriverChat(array $c): bool
-    {
-        return ($c['kind'] ?? 'mitra') === 'pengemudi';
-    }
-
     /** [display name, role label] of the person on the other side of the conversation. */
     private function counterpart(array $c, bool $isMitra, array $customer, array $mitra): array
     {
-        $driver = $this->isDriverChat($c);
         if ($isMitra) {
-            return [$customer['name'], $driver ? 'Penyewa · chat pengemudi' : 'Penyewa'];
+            return [$customer['name'], 'Penyewa'];
         }
 
-        return $driver ? [Drivana::driverName((int) $c['booking_id']), 'Pengemudi · ' . ($mitra['business_name'] ?: $mitra['name'])] : [$mitra['business_name'] ?: $mitra['name'], 'Mitra rental'];
+        return [$mitra['business_name'] ?: $mitra['name'], 'Mitra rental'];
     }
 
     /** "Online" = signed in during the last 30 minutes. */
@@ -85,7 +78,7 @@ class Chat extends BaseController
             $msgs = $this->messages((int) $c['id']);
             [$name] = $this->counterpart($c, $isMitra, Store::get('users', (int) $c['customer_id']), Store::get('users', (int) $c['mitra_id']));
             $rows[] = [
-                'id' => $c['id'], 'last_message_at' => $c['last_message_at'], 'other_name' => $name, 'driver' => $this->isDriverChat($c),
+                'id' => $c['id'], 'last_message_at' => $c['last_message_at'], 'other_name' => $name,
                 'car_name' => $c['car_id'] ? (Store::get('cars', (int) $c['car_id'])['name'] ?? null) : null,
                 'last_body' => $msgs ? end($msgs)['body'] : '', 'unread' => count(array_filter($msgs, fn ($m) => (int) $m['sender_id'] !== $me && $m['read_at'] === null)),
             ];
@@ -109,7 +102,7 @@ class Chat extends BaseController
         }
         $car = (int) $this->request->getGet('mobil') ?: null;
         $me = (int) session('user')['id'];
-        $c = Store::first('conversations', fn ($x) => (int) $x['customer_id'] === $me && (int) $x['mitra_id'] === $mitraId && ! $this->isDriverChat($x));
+        $c = Store::first('conversations', fn ($x) => (int) $x['customer_id'] === $me && (int) $x['mitra_id'] === $mitraId);
         if (! $c) {
             $id = Store::insert('conversations', ['customer_id' => $me, 'mitra_id' => $mitraId, 'car_id' => $car, 'created_at' => Drivana::now(), 'last_message_at' => Drivana::now()]);
         } else {
@@ -122,25 +115,6 @@ class Chat extends BaseController
         return redirect()->to('chat/' . $id);
     }
 
-    /** Customer opens (or creates) the chat with the driver of a booking that includes one. */
-    public function startDriver(string $code)
-    {
-        $b = (new BookingService())->findByCode($code);
-        $me = (int) session('user')['id'];
-        if (! $b || (int) $b['customer_id'] !== $me) {
-            $this->notFound();
-        }
-        if (! $b['with_driver'] || ! in_array($b['status'], ['dikonfirmasi', 'aktif'], true)) {
-            return redirect()->to('pesanan/' . $code)->with('error', 'Chat pengemudi tersedia setelah pesanan dengan pengemudi dikonfirmasi mitra.');
-        }
-        $c = Store::first('conversations', fn ($x) => $this->isDriverChat($x) && (int) $x['booking_id'] === (int) $b['id']);
-        $id = $c ? (int) $c['id'] : Store::insert('conversations', [
-            'customer_id' => $me, 'mitra_id' => (int) $b['mitra_id'], 'car_id' => (int) $b['car_id'], 'booking_id' => (int) $b['id'], 'kind' => 'pengemudi',
-            'created_at' => Drivana::now(), 'last_message_at' => Drivana::now(),
-        ]);
-
-        return redirect()->to('chat/' . $id);
-    }
 
     /** Mitra opens (or creates) a conversation with a customer (from a reservation). */
     public function startMitra(int $customerId)
@@ -150,7 +124,7 @@ class Chat extends BaseController
             $this->notFound();
         }
         $me = (int) session('user')['id'];
-        $c = Store::first('conversations', fn ($x) => (int) $x['customer_id'] === $customerId && (int) $x['mitra_id'] === $me && ! $this->isDriverChat($x));
+        $c = Store::first('conversations', fn ($x) => (int) $x['customer_id'] === $customerId && (int) $x['mitra_id'] === $me);
         $id = $c ? (int) $c['id'] : Store::insert('conversations', ['customer_id' => $customerId, 'mitra_id' => $me, 'car_id' => (int) $this->request->getGet('mobil') ?: null, 'created_at' => Drivana::now(), 'last_message_at' => Drivana::now()]);
 
         return redirect()->to('mitra/pesan/' . $id);

@@ -265,7 +265,7 @@ class DummyData
         $conv($verified[3], $mBudi, $c['ford-explorer'], [[$verified[3], 'Apakah bisa tanpa pengemudi?', '-5 hours', false]]);
         $conv($maulida, $mSari, $c['tesla-model-y'], [[$maulida, 'Apakah Tesla bisa disewa 3 hari dengan charger?', '-30 minutes', false]]);
 
-        /* ───────── notifications, complaints, activity, promo ───────── */
+        /* ───────── notifications, activity, promo ───────── */
         $notif = fn (int $u, string $t, string $b, string $url, string $w, bool $read = false) => $ins('notifications', ['user_id' => $u, 'title' => $t, 'body' => $b, 'url' => $url, 'created_at' => $ago($w), 'read_at' => $read ? $ago($w) : null]);
         $notif($maulida, 'Sewa dimulai', 'Selamat jalan! Honda CR-V sudah bersamamu.', 'pesanan', '-1 day');
         $notif($maulida, 'Sewa selesai', 'Bagaimana pengalamanmu? Beri ulasan untuk Hyundai Tucson.', 'pesanan', '-9 days');
@@ -276,8 +276,6 @@ class DummyData
             $notif($admin, 'Dokumen baru perlu diperiksa', "$nm mengirim dokumen verifikasi.", 'admin/verifikasi', '-20 minutes');
         }
         $notif($admin, 'Mobil baru perlu ditinjau', 'Sari Motor menambahkan Fiat 500 Classic.', 'admin/mobil', '-3 hours');
-        $ins('complaints', ['user_id' => $maulida, 'booking_id' => $reviewMe, 'subject' => 'AC mobil kurang dingin', 'message' => 'Selama sewa Hyundai Tucson, AC kurang dingin di jam siang. Mohon ditindaklanjuti.', 'status' => 'open', 'admin_reply' => null, 'replied_at' => null, 'created_at' => $ago('-6 hours')]);
-        $ins('complaints', ['user_id' => $mBudi, 'booking_id' => null, 'subject' => 'Langganan belum tercatat', 'message' => 'Saya sudah membayar paket Bulanan tapi fitur analitik belum terbuka.', 'status' => 'resolved', 'admin_reply' => 'Terima kasih. Sudah kami cek: langganan aktif sampai 20 hari ke depan. Silakan muat ulang halaman.', 'replied_at' => $ago('-1 day'), 'created_at' => $ago('-2 days')]);
         foreach ([['success', 'Admin menyetujui dokumen Dewi Lestari', 'Selfie, KTP, SIM', '-9 minutes'], ['info', 'Pengguna baru mengunggah dokumen KTP', 'Andi Pratama', '-15 minutes'], ['danger', 'Dokumen ditolak: foto buram dan terpotong', 'Budi Hartono · notifikasi terkirim', '-28 minutes'], ['success', 'Mobil Honda CR-V disetujui', 'Rental Jaya Abadi', '-3 hours'], ['info', 'Mitra baru mendaftar', 'Citra Rent', '-4 hours'], ['success', 'Langganan Premium Bulanan dibeli', 'Rental Jaya Abadi · Rp 149.000', '-10 days']] as [$tone, $text, $meta, $w]) {
             $ins('activity_logs', ['actor_id' => $admin, 'tone' => $tone, 'text' => $text, 'meta' => $meta, 'created_at' => $ago($w)]);
         }

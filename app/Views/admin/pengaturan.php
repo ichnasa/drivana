@@ -16,7 +16,6 @@
     <div class="menu-group">
         <a class="row" href="<?= site_url('admin/mobil') ?>"><?= icon('car', 22) ?><span style="flex:1"><b style="display:block">Kelola Data Mobil</b><small class="muted"><?= $cars_pending ?> menunggu tinjauan</small></span><?= icon('chevron-right', 18) ?></a>
         <a class="row" href="<?= site_url('admin/transaksi') ?>"><?= icon('receipt', 22) ?><span style="flex:1"><b style="display:block">Transaksi Booking</b><small class="muted">Pantau booking dan pembayaran</small></span><?= icon('chevron-right', 18) ?></a>
-        <a class="row" href="<?= site_url('admin/keluhan') ?>"><?= icon('message-square-warning', 22) ?><span style="flex:1"><b style="display:block">Keluhan</b><small class="muted"><?= $complaints_open ?> belum dibalas</small></span><?= icon('chevron-right', 18) ?></a>
         <a class="row" href="<?= site_url('admin/notifikasi') ?>"><?= icon('bell', 22) ?><span style="flex:1"><b style="display:block">Notifikasi</b></span><?= icon('chevron-right', 18) ?></a>
     </div>
 

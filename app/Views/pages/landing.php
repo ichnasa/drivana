@@ -10,7 +10,7 @@
     <div class="notice"><?= icon('search', 18) ?> Cari mobil sesuai kapasitas, tipe, harga, dan pilihan pengemudi.</div>
     <div class="notice"><?= icon('shield-check', 18) ?> Pengguna dan mitra terverifikasi oleh tim Drivana.</div>
     <div class="notice"><?= icon('credit-card', 18) ?> Bayar lewat transfer bank, e-wallet, atau kartu.</div>
-    <div class="notice"><?= icon('message-square', 18) ?> Chat langsung dengan mitra dan pengemudi.</div>
+    <div class="notice"><?= icon('message-square', 18) ?> Chat langsung dengan mitra rental.</div>
 </div>
 
 <a class="btn btn-primary" href="<?= site_url('cari') ?>"><span>Cari Mobil</span></a>

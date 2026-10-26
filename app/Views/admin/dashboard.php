@@ -42,7 +42,6 @@
             </article>
         <?php endforeach ?>
         <a class="row" href="<?= site_url('admin/mobil') ?>"><?= icon('car', 22) ?><span style="flex:1"><b style="display:block">Mobil baru</b><small class="muted"><?= $cars_pending ?> menunggu tinjauan</small></span><?= icon('chevron-right', 18) ?></a>
-        <a class="row" href="<?= site_url('admin/keluhan') ?>"><?= icon('message-square-warning', 22) ?><span style="flex:1"><b style="display:block">Keluhan</b><small class="muted"><?= $complaints_open ?> belum dibalas</small></span><?= icon('chevron-right', 18) ?></a>
     </div>
 
     <div class="section-head"><h2>Aktivitas Terbaru</h2><a href="<?= site_url('admin/aktivitas') ?>">Semua Log</a></div>

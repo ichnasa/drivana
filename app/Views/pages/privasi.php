@@ -10,7 +10,7 @@
     <div class="panel"><h4>Untuk apa data dipakai</h4><p class="muted">Verifikasi identitas, memproses pemesanan dan pembayaran, serta komunikasi antara penyewa dan mitra.</p></div>
     <div class="panel"><h4>Siapa yang dapat melihat</h4><p class="muted">Dokumen identitas hanya dilihat admin Drivana untuk verifikasi. Mitra hanya melihat data penyewa yang memesan mobilnya.</p></div>
     <div class="panel"><h4>Keamanan</h4><p class="muted">Data dikirim lewat koneksi terenkripsi dan password disimpan dalam bentuk hash.</p></div>
-    <div class="panel"><h4>Hak kamu</h4><p class="muted">Kamu dapat memperbarui data di menu Profil atau meminta bantuan lewat menu Bantuan.</p></div>
+    <div class="panel"><h4>Hak kamu</h4><p class="muted">Kamu dapat memperbarui data di menu Profil atau menghubungi kami lewat halaman Hubungi Kami.</p></div>
 </div>
 
 <?= $this->endSection() ?>

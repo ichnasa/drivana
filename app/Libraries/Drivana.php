@@ -22,8 +22,6 @@ class Drivana
     public const TRANSMISSION = ['Manual', 'Automatic'];
     public const FUEL         = ['Bensin', 'Diesel', 'Listrik', 'Hybrid'];
 
-    /** Drivers assigned to bookings that include a driver (picked by booking id). */
-    public const DRIVERS = ['Pak Slamet', 'Pak Anwar', 'Pak Hendra', 'Pak Rudi', 'Pak Joko', 'Pak Syahrul'];
 
     /** Saved-address list shown on the profile (UI only). */
     public const DUMMY_ADDRESSES = [
@@ -134,10 +132,6 @@ class Drivana
         return ['customer' => 'beranda', 'mitra' => 'mitra/dashboard', 'admin' => 'admin/dashboard'][$role] ?? 'login';
     }
 
-    public static function driverName(int $bookingId): string
-    {
-        return self::DRIVERS[$bookingId % count(self::DRIVERS)];
-    }
 
     public static function now(): string
     {
